@@ -1,7 +1,7 @@
 
 import {sort} from "../application/functions";
 import {skipped} from "../application/functions";
-import {CommentDBType, CommentTypeOutput} from "../models/types";
+import {CommentDBType, CommentTypeOutput} from "../models/comments-types";
 import {CommentModel} from "../schemes/schemes";
 import {ObjectId} from "mongodb";
 

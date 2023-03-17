@@ -1,4 +1,4 @@
-import {BlogTypeOutput} from "./types";
+import {BlogTypeOutput} from "./blogs-types";
 
 export type URIParamsPostModel = {
     /**

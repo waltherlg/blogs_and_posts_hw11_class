@@ -5,35 +5,7 @@ import {Request} from "express";
 
 // type | interface | class
 
-export type CommentDBType = {
-    _id:	string | ObjectId,
-    parentType: string,
-    parentId: string,
-    content:	string
-    userId:	string
-    userLogin:	string
-    createdAt:	string
-    likesCount: number
-    dislikesCount: number
-    myStatus: string
 
-}
-type CommentatorInfoType = {
-    userId:	string
-    userLogin:	string
-}
-type LikesInfoType = {
-    likesCount: number,
-    dislikesCount: number,
-    myStatus: string
-}
-export type CommentTypeOutput = {
-    id:	string
-    content: string
-    commentatorInfo: CommentatorInfoType
-    createdAt:	string
-    LikesInfo: LikesInfoType
-}
 
 export type UserDeviceDBType = {
     _id: ObjectId,

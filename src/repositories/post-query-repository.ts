@@ -1,5 +1,5 @@
 
-import {PostDBType, PostTypeOutput} from "../models/types";
+import {PostDBType, PostTypeOutput} from "../models/posts-types";
 import {PaginationOutputModel} from "../models/models";
 import {sort} from "../application/functions";
 import {skipped} from "../application/functions";

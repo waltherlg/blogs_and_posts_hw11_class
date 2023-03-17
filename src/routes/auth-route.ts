@@ -2,7 +2,6 @@ import {Request, Response, Router} from "express";
 import {usersService} from "../domain/users-service";
 import {RequestWithBody} from "../models/types";
 import {UserAuthModel, UserInputModel} from "../models/users-models";
-import {jwtService} from "../application/jwt-service";
 import {authMiddleware, refreshTokenCheck} from "../middlewares/basic-auth.middleware";
 import {
     confirmationCodeValidation,
