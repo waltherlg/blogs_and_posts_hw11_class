@@ -61,7 +61,7 @@ class BlogsController {
         }
     }
 
-    async createPostByblogsId(req: RequestWithParamsAndBody<URIParamsIDBlogModel, CreatePostModel>, res: Response) {
+    async createPostByBlogsId(req: RequestWithParamsAndBody<URIParamsIDBlogModel, CreatePostModel>, res: Response) {
         try {
             let foundBlog = await blogsQueryRepo.getBlogByID(req.params.blogId)
             if (!foundBlog) {
@@ -163,7 +163,7 @@ blogsRouter.post('/:blogId/posts',
     shortDescriptionValidation,
     contentValidation,
     inputValidationMiddleware,
-    blogsControllerInstance.createPostByblogsId)
+    blogsControllerInstance.createPostByBlogsId)
 
 blogsRouter.get('/:id',
     blogsControllerInstance.getBlogById)

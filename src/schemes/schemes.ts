@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import {ObjectId} from "mongodb";
-import {CommentDBType, PostDBType, UserDeviceDBType} from "../models/types";
+import {CommentDBType, UserDeviceDBType} from "../models/types";
+import {PostDBType} from "../models/posts-types";
 import {UserDBType} from "../models/users-types";
 import {BlogDBType} from "../models/blogs-types";
 

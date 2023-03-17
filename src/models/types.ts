@@ -1,24 +1,7 @@
 import {ObjectId} from "mongodb";
 import {Request} from "express";
 
-export type PostTypeOutput = {
-    id: string,
-    title: string,
-    shortDescription: string,
-    content: string,
-    blogId: string,
-    blogName: string,
-    createdAt: string
-}
-export type PostDBType = {
-    _id: ObjectId,
-    title: string,
-    shortDescription: string,
-    content: string,
-    blogId: string,
-    blogName: string,
-    createdAt: string
-}
+
 
 // type | interface | class
 
