@@ -1,0 +1,59 @@
+npm install --global yarn // установить ярн глобально (глобал значит не надо ставить ярн в каждом проекте)
+
+yarn init --yes // инициация проекта
+
+yarn add express // установили экспресс
+
+yarn add nodemon -D // установить нодмонитор (-D означает что установится в Дев зависимости, то есть нужен будет только в момент разработки
+
+yarn add typescript -D // сам тайп скрипт
+
+yarn add ts-node -D // чет нужно для нода (надо погуглить)
+
+yarn add @types/express -D // типы для экспресса
+
+yarn add @types/node -D // типы для нода
+
+yarn tsc --init // инициализация файла настроек компилятора (там нужно папку dist в outdir поставить
+
+// в файле package.json впихнуть:
+  "scripts": {
+    "watch": "tsc -w",
+    "dev": "nodemon .//dist//index.js"
+
+yarn add base-64 // для базовой авторизации
+
+yarn add bcrypt // для шифрования
+yarn add @types/bcrypt -D
+
+yarn add body-parser // боди парсер
+
+yarn add cors // вроде как для включение в заголовки всякого добра
+
+yarn add dotenv //
+
+yarn add env //
+
+yarn add express-validator //
+
+yarn add jsonwebtoken //
+yarn add @types/jsonwebtoken -D //
+
+yarn add mongodb //
+
+yarn add nodemailer // для отправки письма
+yarn add @types/nodemailer
+
+yarn add uuid // генерация кодов
+yarn add @types/uuid -D
+
+yarn add date-fns
+
+yarn add cookie-parser
+
+yarn add express-rate-limit
+
+yarn add mongoose
+
+yarn add jest ts-jest @types/jest supertest @types/supertest -D
+yarn ts-jest config:init
