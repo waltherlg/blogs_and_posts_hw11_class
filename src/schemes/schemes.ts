@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import {ObjectId} from "mongodb";
-import {BlogDBType, CommentDBType, PostDBType, UserDeviceDBType, UserDBType} from "../models/types";
+import {CommentDBType, PostDBType, UserDeviceDBType} from "../models/types";
+import {UserDBType} from "../models/users-types";
+import {BlogDBType} from "../models/blogs-types";
 
 const likedCommentsSchema = new mongoose.Schema({
     commentsId: String,

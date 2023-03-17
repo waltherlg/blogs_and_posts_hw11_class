@@ -22,57 +22,6 @@ export type PostDBType = {
 
 // type | interface | class
 
-export type BlogTypeOutput = {
-    id: string,
-    name: string,
-    description: string,
-    websiteUrl: string,
-    createdAt: string
-    isMembership: boolean
-}
-export type BlogDBType = {
-    _id: ObjectId,
-    name: string,
-    description: string,
-    websiteUrl: string,
-    createdAt: string,
-    isMembership: boolean
-}
-
-type commentsLikeType = {
-    commentsId: string
-    createdAt: Date
-    status: string
-}
-
-type postsLikeType = {
-    postsId: string
-    createdAt: Date
-    status: string
-}
-
-export type UserDBType = {
-    _id: ObjectId
-    login: string
-    passwordHash: string
-    passwordSalt: string
-    email: string
-    createdAt: string
-    confirmationCode: string | null
-    expirationDateOfConfirmationCode: Date | null
-    isConfirmed: boolean,
-    passwordRecoveryCode: string | null
-    expirationDateOfRecoveryCode: Date | null
-    likedComments: Array<commentsLikeType>
-    likedPosts: Array<postsLikeType>
-}
-export type UserTypeOutput = {
-    id: string
-    login: string
-    email: string
-    createdAt: string
-}
-
 export type CommentDBType = {
     _id:	string | ObjectId,
     parentType: string,

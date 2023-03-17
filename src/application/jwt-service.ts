@@ -1,4 +1,4 @@
-import {UserDBType} from "../models/types";
+import {UserDBType} from "../models/users-types";
 import {ObjectId} from "mongodb";
 import jwt from 'jsonwebtoken'
 import {settings} from "../settings";

@@ -1,5 +1,6 @@
 import {ObjectId} from "mongodb";
-import {UserDeviceDBType, UserDBType, UserTypeOutput} from "../models/types";
+import {UserDBType, UserTypeOutput} from "../models/users-types";
+import {UserDeviceDBType} from "../models/types";
 import {usersRepository} from "../repositories/users-repository";
 import * as bcrypt from 'bcrypt'
 import {v4 as uuid4} from 'uuid'

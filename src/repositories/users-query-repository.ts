@@ -1,9 +1,10 @@
-import {UserDBType, UserTypeOutput} from "../models/types";
+import {UserDBType, UserTypeOutput} from "../models/users-types";
 import {usersRepository} from "./users-repository";
 import {PaginationOutputModel} from "../models/models";
 import {UserModel} from "../schemes/schemes";
 import {ObjectId} from "mongodb";
 import {tr} from "date-fns/locale";
+import {HydratedDocument} from "mongoose";
 
 function sort(sortDirection: string) {
     return (sortDirection === 'desc') ? -1 : 1;
@@ -33,7 +34,7 @@ export const usersQueryRepo = {
             .limit(+pageSize)
             .lean()
 
-        let outUsers = users.map((users: UserDBType) => {
+        let outUsers = users.map((users) => {
             return {
                 id: users._id.toString(),
                 login: users.login,

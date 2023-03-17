@@ -8,7 +8,7 @@ import {postsService} from "../../src/domain/posts-service";
 import {ObjectId} from "mongodb";
 import {usersQueryRepo} from "../../src/repositories/users-query-repository";
 import {UserModel} from "../../src/schemes/schemes";
-import {UserTypeOutput} from "../../src/models/types";
+import {UserTypeOutput} from "../../src/models/users-types";
 
 
 const basicAuthRight = Buffer.from('admin:qwerty').toString('base64');
