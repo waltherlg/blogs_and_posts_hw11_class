@@ -10,23 +10,8 @@ import {usersService} from "./users-service";
 import {jwtService} from "../application/jwt-service";
 import {deviceService} from "./device-service";
 import {userDeviceRepo} from "../repositories/users-device-repository";
+import {cryptoAdapter} from "../adapters/crypto-adapter";
 
-
-type GenerateHashResponseType = {
-    passwordHash: string,
-    salt: string
-}
-
-const cryptoAdapter = {
-    async generateHash(password: string):Promise<GenerateHashResponseType> {
-        const salt = await bcrypt.genSalt(10)
-      const  passwordHash =  await bcrypt.hash(password, salt)
-
-        return  {
-            passwordHash, salt
-        }
-    }
-}
 
 export const authService = {
 
@@ -123,7 +108,7 @@ export const authService = {
         if (!user) return false
         if (user.expirationDateOfRecoveryCode! > new Date()){
             const passwordSalt = await bcrypt.genSalt(10)
-            const passwordHash = await this._generateHash(newPassword, passwordSalt)
+            const passwordHash = await cryptoAdapter.generateHash(newPassword, passwordSalt)
             let result = await usersRepository.newPasswordSet(user._id, passwordSalt, passwordHash)
             return result
         }
@@ -133,11 +118,6 @@ export const authService = {
     async isRecoveryCodeExist(code: string){
         let isExist = await usersRepository.getUserByPasswordRecoveryCode(code)
         return !!isExist;
-    },
-
-    async _generateHash(password: string, salt: string){
-        const hash = await bcrypt.hash(password, salt)
-        return hash
     },
 
     // async isTokenExpired(refreshToken: string){
