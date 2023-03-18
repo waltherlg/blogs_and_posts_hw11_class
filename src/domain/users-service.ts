@@ -1,23 +1,19 @@
 import {ObjectId} from "mongodb";
 import {UserDBType, UserTypeOutput} from "../models/users-types";
 import {usersRepository} from "../repositories/users-repository";
-import * as bcrypt from 'bcrypt'
 import {usersQueryRepo} from "../repositories/users-query-repository";
-import {UserModel} from "../schemes/schemes";
-import {bcryptService} from "../application/bcrypt-service";
+import {cryptoAdapter} from "../adapters/crypto-adapter";
 
 
 class UsersService {
     async createUser(login: string, password: string, email: string): Promise<string> {
 
-        const passwordSalt = await bcrypt.genSalt(10)
-        const passwordHash = await this._generateHash(password, passwordSalt)
+        const passwordHash = await cryptoAdapter.generateHash(password)
 
-        const user = new UserDBType(
+        const userDTO = new UserDBType(
             new ObjectId(),
             login,
             passwordHash,
-            passwordSalt,
             email,
             new Date().toISOString(),
             null,
@@ -28,7 +24,7 @@ class UsersService {
             [],
             [])
 
-        const newUser = await usersRepository.createUser(user)
+        const newUser = await usersRepository.createUser(userDTO)
         return newUser._id.toString()
     }
 
@@ -42,21 +38,6 @@ class UsersService {
             login: user.login,
             userId
         }
-    }
-
-    async _generateHash(password: string, salt: string){
-        const hash = await bcrypt.hash(password, salt)
-        return hash
-    }
-
-    async checkCredentials (loginOrEmail: string, password: string){
-        const user = await usersRepository.findUserByLoginOrEmail(loginOrEmail)
-        if (!user) return false
-        const passwordHash = await this._generateHash(password, user.passwordSalt)
-        if (user.passwordHash !== passwordHash){
-            return false
-        }
-        return user._id
     }
 
     async getUserById(id: string): Promise<UserDBType | null> {

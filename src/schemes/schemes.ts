@@ -19,7 +19,6 @@ const likedPostsSchema = new mongoose.Schema({
 export const userSchema = new mongoose.Schema<UserDBType>({
     login: String,
     passwordHash: String,
-    passwordSalt: String,
     email: String,
     createdAt: String,
     confirmationCode: {

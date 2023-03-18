@@ -17,14 +17,13 @@ export const authService = {
 
     async registerUser(login: string, password: string, email: string): Promise<string | null> {
 
-        const {salt, passwordHash} = await cryptoAdapter.generateHash(password)
+        const passwordHash = await cryptoAdapter.generateHash(password)
         //const passwordHash = await this._generateHash(password, passwordSalt)
 
         const newUser: UserDBType = {
             "_id": new ObjectId(),
             "login": login,
             passwordHash,
-            passwordSalt: salt,
             "email": email,
             "createdAt": new Date().toISOString(),
             "confirmationCode": uuid4(),
@@ -107,9 +106,8 @@ export const authService = {
         let user = await usersRepository.getUserByPasswordRecoveryCode(recoveryCode)
         if (!user) return false
         if (user.expirationDateOfRecoveryCode! > new Date()){
-            const passwordSalt = await bcrypt.genSalt(10)
-            const passwordHash = await cryptoAdapter.generateHash(newPassword, passwordSalt)
-            let result = await usersRepository.newPasswordSet(user._id, passwordSalt, passwordHash)
+            const passwordHash = await cryptoAdapter.generateHash(newPassword)
+            let result = await usersRepository.newPasswordSet(user._id, passwordHash)
             return result
         }
         return false

@@ -82,12 +82,11 @@ class UsersRepository {
         return result.modifiedCount === 1
     }
 
-    async newPasswordSet(_id: ObjectId, passwordSalt: string, passwordHash: string){
+    async newPasswordSet(_id: ObjectId, passwordHash: string){
         let result = await UserModel.updateOne(
             {_id: _id},
             {$set:
                     {passwordHash: passwordHash,
-                        passwordSalt: passwordSalt,
                         passwordRecoveryCode: null,
                         expirationDateOfRecoveryCode: null
                     }})

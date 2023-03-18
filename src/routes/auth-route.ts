@@ -14,6 +14,7 @@ import {authService} from "../domain/auth-service";
 import {authRateLimiter} from "../middlewares/auth-rate-limiter";
 import {isEmailExistValidation} from "../middlewares/other-midlevares";
 import {usersQueryRepo} from "../repositories/users-query-repository";
+import {cryptoAdapter} from "../adapters/crypto-adapter";
 
 
 export const authRouter = Router({})
@@ -76,7 +77,7 @@ authRouter.post('/login',
     authRateLimiter.login,
     async (req: RequestWithBody<UserAuthModel>, res: Response) => {
         try {
-            const userId = await usersService.checkCredentials(req.body.loginOrEmail, req.body.password)
+            const userId = await cryptoAdapter.checkCredentials(req.body.loginOrEmail, req.body.password)
             if (userId) {
                 const {accessToken, refreshToken} = await authService.login(userId, req.ip, req.headers['user-agent']!)
                 res.status(200).cookie("refreshToken", refreshToken, {httpOnly: true, secure: true}).send({accessToken})

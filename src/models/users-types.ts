@@ -17,7 +17,6 @@ export class UserDBType {
         public _id: ObjectId,
         public login: string,
         public passwordHash: string,
-        public passwordSalt: string,
         public email: string,
         public createdAt: string,
         public confirmationCode: string | null,
