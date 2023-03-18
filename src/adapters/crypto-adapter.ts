@@ -1,5 +1,6 @@
 import * as bcrypt from "bcrypt";
 import {usersRepository} from "../repositories/users-repository";
+import {ObjectId} from "mongodb";
 
 export const cryptoAdapter = {
 
@@ -14,15 +15,15 @@ export const cryptoAdapter = {
         return passwordHash
     },
 
-    async checkCredentials (loginOrEmail: string, password: string){
+    async checkCredentials (loginOrEmail: string, password: string): Promise<ObjectId | null>{
         const user = await usersRepository.findUserByLoginOrEmail(loginOrEmail)
-        if (!user) return false
+        if (!user) return null
         const existingSalt = user.passwordHash.substring(0, 29);
         // console.log('salt ' + existingSalt)
         const hashOfIncomePassword = await this.generateHashWithExistSalt(password, existingSalt)
         // console.log(user.passwordHash, hashOfIncomePassword)
         if (user.passwordHash !== hashOfIncomePassword){
-            return false
+            return null
         }
         return user._id
     },
