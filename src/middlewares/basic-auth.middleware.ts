@@ -1,6 +1,4 @@
 import {NextFunction, Request, Response} from "express";
-import {usersService} from "../domain/users-service";
-import {authService} from "../domain/auth-service";
 import {jwtService} from "../application/jwt-service";
 import {deviceService} from "../domain/device-service";
 import {checkService} from "../domain/check-service";
@@ -39,6 +37,23 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
         return
     }
     res.sendStatus(401)
+}
+
+export const optionalAuthMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.headers.authorization) {
+        next()
+        return
+    }
+
+    const token = req.headers.authorization?.split(' ')[1]
+
+    const userId = await jwtService.getUserIdFromRefreshToken(token)
+    if (userId) {
+        req.userId = userId
+        next()
+        return
+    }
+    next()
 }
 
 export const refreshTokenCheck = async (req: Request, res: Response, next: NextFunction) => {

@@ -29,7 +29,7 @@ import {
     shortDescriptionValidation,
     titleValidation
 } from "../middlewares/input-validation-middleware/input-validation-middleware";
-import {authMiddleware, basicAuthMiddleware} from "../middlewares/basic-auth.middleware";
+import {authMiddleware, basicAuthMiddleware, optionalAuthMiddleware} from "../middlewares/basic-auth.middleware";
 import {postsQueryRepo} from "../repositories/post-query-repository";
 
 export const postsRouter = Router({})
@@ -152,6 +152,7 @@ postsRouter.get('/',
     postControllerInstance.getAllPosts)
 
 postsRouter.get('/:postId',
+    optionalAuthMiddleware,
     postControllerInstance.getPostById)
 
 postsRouter.post('/',

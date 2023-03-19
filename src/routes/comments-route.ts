@@ -1,7 +1,7 @@
 import {Request, Response, Router} from "express";
 import {commentService} from "../domain/comment-service";
 import {likeService} from "../domain/like-service";
-import {authMiddleware} from "../middlewares/basic-auth.middleware";
+import {authMiddleware, optionalAuthMiddleware} from "../middlewares/basic-auth.middleware";
 import {isUserOwnerOfComments} from "../middlewares/other-midlevares";
 import {
     commentContentValidation,
@@ -16,7 +16,7 @@ export const commentsRouter = Router({})
 class CommentsController {
     async getCommentById(req: Request, res: Response) {
         try {
-            let foundComment = await commentsQueryRepo.getCommentById(req.params.id.toString())
+            let foundComment = await commentsQueryRepo.getCommentById(req.params.id.toString(), req.userId)
             if (foundComment) {
                 res.status(200).send(foundComment)
             } else {
@@ -82,6 +82,7 @@ export const commentControllerInstance = new CommentsController()
 
 
 commentsRouter.get('/:id',
+    optionalAuthMiddleware,
     commentControllerInstance.getCommentById)
 
 commentsRouter.delete('/:commentId',
@@ -100,7 +101,7 @@ commentsRouter.put('/:commentsId/like-status',
     authMiddleware,
     likeStatusValidation,
     inputValidationMiddleware,
-commentControllerInstance.updateCommentById)
+commentControllerInstance.setLikeStatusForComment)
 
 //
 //GET return comment by id

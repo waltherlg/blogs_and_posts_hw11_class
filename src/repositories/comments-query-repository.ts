@@ -2,8 +2,9 @@
 import {sort} from "../application/functions";
 import {skipped} from "../application/functions";
 import {CommentDBType, CommentTypeOutput} from "../models/comments-types";
-import {CommentModel} from "../schemes/schemes";
+import {CommentModel, UserModel} from "../schemes/schemes";
 import {ObjectId} from "mongodb";
+import {UserDBType} from "../models/users-types";
 
 export const commentsQueryRepo = {
 
@@ -15,6 +16,7 @@ export const commentsQueryRepo = {
         pageSize: string,) {
 
         let commentsCount = await CommentModel.countDocuments({$and: [{parentType: "post"}, {parentId: postId}]})
+        // let user = await UserModel.findOne({_id: new ObjectId(userId)})
 
         let comments = await CommentModel.find({$and: [{parentType: "post"}, {parentId: postId}]})
             .sort({[sortBy]: sort(sortDirection)})
@@ -51,7 +53,7 @@ export const commentsQueryRepo = {
         return outputComments
     },
 
-    async getCommentById(id: string): Promise<CommentTypeOutput | null> {
+    async getCommentById(id: string, userId?: string): Promise<CommentTypeOutput | null> {
         if (!ObjectId.isValid(id)) {
             return null
         }
@@ -59,6 +61,14 @@ export const commentsQueryRepo = {
         const comment: CommentDBType | null = await CommentModel.findOne({_id: _id})
         if (!comment) {
             return null
+        }
+        let myStatus = 'None'
+        const user: UserDBType | null = await UserModel.findOne({_id: new ObjectId(userId)})
+        if (user){
+            let likedComment = user.likedComments.find(e => e.commentsId === id)
+            if (likedComment){
+                myStatus = likedComment.status
+            }
         }
         return {
             id: comment._id.toString(),
@@ -71,7 +81,7 @@ export const commentsQueryRepo = {
             LikesInfo: {
                 likesCount: comment.likesCount,
                 dislikesCount: comment.dislikesCount,
-                myStatus: 'None'
+                myStatus: myStatus
             }
         }
     },
