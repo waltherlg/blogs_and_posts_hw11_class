@@ -14,7 +14,7 @@ import {jwtService} from "../application/jwt-service";
 export const commentsRouter = Router({})
 
 class CommentsController {
-    async getCommentById(req: Request, res: Response) {
+    async getCommentById(req: Request & {userId?: string}, res: Response) {
         try {
             let foundComment = await commentsQueryRepo.getCommentById(req.params.id.toString(), req.userId)
             if (foundComment) {

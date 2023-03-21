@@ -1,12 +1,12 @@
 import {ObjectId} from "mongodb";
 
-type commentsLikeType = {
+export type CommentsLikeType = {
     commentsId: string
     createdAt: Date
     status: string
 }
 
-type postsLikeType = {
+export type PostsLikeType = {
     postsId: string
     createdAt: Date
     status: string
@@ -24,8 +24,8 @@ export class UserDBType {
         public isConfirmed: boolean,
         public passwordRecoveryCode: string | null,
         public expirationDateOfRecoveryCode: Date | null,
-        public likedComments: Array<commentsLikeType>,
-        public likedPosts: Array<postsLikeType>) {}
+        public likedComments: Array<CommentsLikeType>,
+        public likedPosts: Array<PostsLikeType>) {}
 }
 
 export type UserTypeOutput = {

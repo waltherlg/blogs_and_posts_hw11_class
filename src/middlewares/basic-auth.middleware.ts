@@ -44,9 +44,7 @@ export const optionalAuthMiddleware = async (req: Request, res: Response, next: 
         next()
         return
     }
-
     const token = req.headers.authorization?.split(' ')[1]
-
     const userId = await jwtService.getUserIdFromRefreshToken(token)
     if (userId) {
         req.userId = userId

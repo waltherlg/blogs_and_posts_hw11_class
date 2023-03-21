@@ -93,7 +93,7 @@ class PostsController {
         }
     }
 
-    async getCommentsByPostId(req: RequestWithParamsAndQuery<URIParamsPostModel, RequestCommentsByPostIdQueryModel>, res: Response) {
+    async getCommentsByPostId(req: RequestWithParamsAndQuery<URIParamsPostModel & {userId?: string}, RequestCommentsByPostIdQueryModel>, res: Response) {
         try {
             const foundPost = await postsQueryRepo.getPostByID(req.params.postId.toString())
             if (!foundPost) {
@@ -104,7 +104,7 @@ class PostsController {
                 let sortDirection = req.query.sortDirection ? req.query.sortDirection : 'desc'
                 let pageNumber = req.query.pageNumber ? req.query.pageNumber : '1'
                 let pageSize = req.query.pageSize ? req.query.pageSize : '10'
-                let foundComments = await commentsQueryRepo.getAllCommentsByPostId(postId, sortBy, sortDirection, pageNumber, pageSize)
+                let foundComments = await commentsQueryRepo.getAllCommentsByPostId(postId, sortBy, sortDirection, pageNumber, pageSize, req.userId)
                 if (foundComments) {
                     res.status(200).send(foundComments)
                 }
@@ -152,7 +152,6 @@ postsRouter.get('/',
     postControllerInstance.getAllPosts)
 
 postsRouter.get('/:postId',
-    optionalAuthMiddleware,
     postControllerInstance.getPostById)
 
 postsRouter.post('/',
@@ -171,6 +170,7 @@ postsRouter.post('/:postId/comments',
     postControllerInstance.createCommentByPostId)
 
 postsRouter.get('/:postId/comments',
+    optionalAuthMiddleware,
     postControllerInstance.getCommentsByPostId)
 
 postsRouter.put('/:postId',

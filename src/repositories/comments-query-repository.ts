@@ -2,6 +2,7 @@
 import {sort} from "../application/functions";
 import {skipped} from "../application/functions";
 import {CommentDBType, CommentTypeOutput} from "../models/comments-types";
+import {CommentsLikeType} from "../models/users-types";
 import {CommentModel, UserModel} from "../schemes/schemes";
 import {ObjectId} from "mongodb";
 import {UserDBType} from "../models/users-types";
@@ -13,7 +14,8 @@ export const commentsQueryRepo = {
         sortBy: string,
         sortDirection: string,
         pageNumber: string,
-        pageSize: string,) {
+        pageSize: string,
+        userId?: string) {
 
         let commentsCount = await CommentModel.countDocuments({$and: [{parentType: "post"}, {parentId: postId}]})
         // let user = await UserModel.findOne({_id: new ObjectId(userId)})
@@ -24,7 +26,25 @@ export const commentsQueryRepo = {
             .limit(+pageSize)
             .lean()
 
+        let likedComment: Array<CommentsLikeType> = []
+        const user: UserDBType | null = await UserModel.findOne({_id: new ObjectId(userId)})
+        console.log(user)
+        if (user){
+            likedComment = user.likedComments
+        }
+
         let outComments = comments.map((comments: CommentDBType) => {
+
+            let myStatus = 'None'
+
+            let currentCommentId = comments._id.toString()
+            let isUserLikeIt = likedComment.find(e => e.commentsId === currentCommentId)
+            console.log(isUserLikeIt)
+            if (isUserLikeIt){
+                myStatus = isUserLikeIt.status
+            }
+            console.log(myStatus)
+
             return {
                 id: comments._id.toString(),
                 content: comments.content,
@@ -36,7 +56,7 @@ export const commentsQueryRepo = {
                 LikesInfo: {
                     likesCount: comments.likesCount,
                     dislikesCount: comments.dislikesCount,
-                    myStatus: 'None'
+                    myStatus: myStatus
                 }
             }
         })
