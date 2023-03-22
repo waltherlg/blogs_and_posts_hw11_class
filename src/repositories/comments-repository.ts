@@ -4,7 +4,7 @@ import {CommentDBType} from "../models/comments-types";
 import {CommentModel} from "../schemes/schemes";
 
 
-class CommentsRepository{
+export class CommentsRepository{
 
     async createComment(newComment: CommentDBType): Promise<string> {
         const comment = new CommentModel(newComment)
@@ -102,7 +102,7 @@ class CommentsRepository{
     }
 }
 
-export const commentsRepository = new CommentsRepository()
+// export const commentsRepository = new CommentsRepository()
 
 // export const commentsRepository = {
 //

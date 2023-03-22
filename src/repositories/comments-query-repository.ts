@@ -7,7 +7,7 @@ import {CommentModel, UserModel} from "../schemes/schemes";
 import {ObjectId} from "mongodb";
 import {UserDBType} from "../models/users-types";
 
-export const commentsQueryRepo = {
+export class CommentsQueryRepo {
 
     async getAllCommentsByPostId(
         postId: string,
@@ -71,7 +71,7 @@ export const commentsQueryRepo = {
             items: outComments
         }
         return outputComments
-    },
+    }
 
     async getCommentById(id: string, userId?: string): Promise<CommentTypeOutput | null> {
         if (!ObjectId.isValid(id)) {
@@ -104,6 +104,7 @@ export const commentsQueryRepo = {
                 myStatus: myStatus
             }
         }
-    },
+    }
 }
 
+export const commentsQueryRepo = new CommentsQueryRepo()

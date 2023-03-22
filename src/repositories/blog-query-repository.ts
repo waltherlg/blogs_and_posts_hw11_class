@@ -14,7 +14,7 @@ function skipped(pageNumber: string, pageSize: string): number {
 }
 
 
-export const blogsQueryRepo = {
+export class BlogsQueryRepo {
 
     async getAllBlogs(
         searchNameTerm: string,
@@ -62,7 +62,7 @@ export const blogsQueryRepo = {
             items: outBlogs
         }
         return outputBlogs
-    },
+    }
 
     async getBlogByID(id: string): Promise<BlogTypeOutput | null> {
         if(!ObjectId.isValid(id)){
@@ -81,7 +81,7 @@ export const blogsQueryRepo = {
             createdAt: blog.createdAt,
             isMembership: blog.isMembership
         }
-    },
-
-
+    }
 }
+
+export const blogsQueryRepo = new BlogsQueryRepo()

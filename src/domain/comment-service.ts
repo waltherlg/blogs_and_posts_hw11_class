@@ -1,12 +1,18 @@
 import {ObjectId} from "mongodb";
 import {CommentDBType, CommentTypeOutput} from "../models/comments-types";
-import {commentsRepository} from "../repositories/comments-repository";
-import {usersQueryRepo} from "../repositories/users-query-repository";
+import {CommentsRepository} from "../repositories/comments-repository";
+import {UsersQueryRepo, usersQueryRepo} from "../repositories/users-query-repository";
 
 
 class CommentService {
+    commentsRepository: CommentsRepository
+    usersQueryRepo: UsersQueryRepo;
+    constructor() {
+        this.commentsRepository = new CommentsRepository()
+        this.usersQueryRepo = new UsersQueryRepo()
+    }
     async createComment(postId: string, content: string, userId: string,): Promise<string> {
-        const user = await usersQueryRepo.getUserById(userId)
+        const user = await this.usersQueryRepo.getUserById(userId)
         const newComment = new CommentDBType(
             new ObjectId(),
             "post",
@@ -18,22 +24,22 @@ class CommentService {
             0,
             0,
             'None')
-        const createdCommentId = await commentsRepository.createComment(newComment)
+        const createdCommentId = await this.commentsRepository.createComment(newComment)
         return createdCommentId
     }
 
     async updateComment(
         id: string,
         content: string): Promise<boolean> {
-        return await commentsRepository.updateComment(id, content)
+        return await this.commentsRepository.updateComment(id, content)
     }
 
     async deleteComment(id: string): Promise<boolean>{
-        return await commentsRepository.deleteComment(id)
+        return await this.commentsRepository.deleteComment(id)
     }
 
     async deleteAllComments(): Promise<boolean>{
-        return await commentsRepository.deleteAllComments()
+        return await this.commentsRepository.deleteAllComments()
     }
 }
 

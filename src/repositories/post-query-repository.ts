@@ -6,7 +6,7 @@ import {skipped} from "../application/functions";
 import {PostModel} from "../schemes/schemes";
 import {ObjectId} from "mongodb";
 
-export const postsQueryRepo = {
+export class PostsQueryRepo {
 
     async getAllPosts(
         sortBy: string,
@@ -45,7 +45,7 @@ export const postsQueryRepo = {
         }
         return outputPosts
 
-    },
+    }
 
     async getAllPostsByBlogsID(
         blogId: string,
@@ -84,7 +84,7 @@ export const postsQueryRepo = {
             items: outPosts
         }
         return outputPosts
-    },
+    }
 
     async getPostByID(id: string): Promise<PostTypeOutput | null> {
         if (!ObjectId.isValid(id)){
@@ -104,10 +104,7 @@ export const postsQueryRepo = {
             blogName: post.blogName,
             createdAt: post.createdAt
         }
-    },
-
-
-
-
-
+    }
 }
+
+export const postsQueryRepo = new PostsQueryRepo()

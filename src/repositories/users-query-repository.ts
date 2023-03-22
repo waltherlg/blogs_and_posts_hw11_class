@@ -14,7 +14,7 @@ function skipped(pageNumber: string, pageSize: string): number {
     return (+pageNumber - 1) * (+pageSize);
 }
 
-export const usersQueryRepo = {
+export class UsersQueryRepo {
 
     async getAllUsers(
         sortBy: string,
@@ -53,7 +53,7 @@ export const usersQueryRepo = {
             items: outUsers
         }
         return outputUsers
-    },
+    }
 
     async getUserById(id: string): Promise<UserTypeOutput | null> {
         const user = await UserModel.findOne({_id: new ObjectId(id)}).lean()
@@ -68,7 +68,7 @@ export const usersQueryRepo = {
             email: user.email,
             createdAt: user.createdAt
         }
-    },
+    }
 
     async isUserAlreadyLikeComment(userId: string, commentsId: string): Promise<boolean> {
         if(!ObjectId.isValid(userId)){
@@ -77,7 +77,7 @@ export const usersQueryRepo = {
         let _id = new ObjectId(userId)
         const isExist = await UserModel.findOne({_id: _id, likedComments: {$elemMatch: {commentsId: commentsId}}})
         return !!isExist
-    },
+    }
 
     async getUsersLikedComments(userId: string){
         if(!ObjectId.isValid(userId)){
@@ -88,6 +88,6 @@ export const usersQueryRepo = {
         if (!user) return null
         return user.likedComments
     }
-
-
 }
+
+export const usersQueryRepo = new UsersQueryRepo()
