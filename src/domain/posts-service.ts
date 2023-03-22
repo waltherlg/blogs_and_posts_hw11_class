@@ -1,9 +1,11 @@
-import {postsRepository} from "../repositories/posts-repository";
+import {PostsRepository, postsRepository} from "../repositories/posts-repository";
 import {ObjectId} from "mongodb";
 import {PostDBType, PostTypeOutput} from "../models/posts-types";
 import {blogsQueryRepo} from "../repositories/blog-query-repository";
 
-class PostsService {
+export class PostsService {
+    constructor(protected postsRepository: PostsRepository) {
+    }
     async createPost(
         title: string,
         shortDescription: string,
@@ -19,7 +21,7 @@ class PostsService {
             blogId,
             blogName,
             new Date().toISOString())
-        const createdPost = await postsRepository.createPost(newPost)
+        const createdPost = await this.postsRepository.createPost(newPost)
         return createdPost
     }
 
@@ -28,6 +30,7 @@ class PostsService {
         shortDescription: string,
         content: string,
         blogId: string): Promise<PostTypeOutput> {
+        //blogService
         let foundBlog = await blogsQueryRepo.getBlogByID(blogId)
         const blogName =  foundBlog!.name
         const newPost: PostDBType = {
@@ -39,7 +42,7 @@ class PostsService {
             "blogName": blogName,
             "createdAt": new Date().toISOString()
         }
-        const createdPost = await postsRepository.createPost(newPost)
+        const createdPost = await this.postsRepository.createPost(newPost)
         return createdPost
     }
 
@@ -60,8 +63,6 @@ class PostsService {
         return await postsRepository.deleteAllPosts()
     }
 }
-
-export const postsService = new PostsService()
 
 // export const postsService = {
 //

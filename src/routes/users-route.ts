@@ -14,7 +14,7 @@ import {usersQueryRepo} from "../repositories/users-query-repository";
 
 export const usersRouter = Router({})
 
-class UsersController {
+export class UsersController {
     async createUser(req: RequestWithBody<UserInputModel>, res: Response) {
         try {
             const newUserId = await usersService.createUser(

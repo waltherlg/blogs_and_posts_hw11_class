@@ -1,10 +1,8 @@
 import {NextFunction, Request, Response} from "express";
-import {validationResult} from "express-validator";
-import {commentService} from "../domain/comment-service";
 import {usersService} from "../domain/users-service";
 import {deviceService} from "../domain/device-service";
 import {commentsQueryRepo} from "../repositories/comments-query-repository";
-import {jwtService} from "../application/jwt-service";
+
 
 
 export const isUserOwnerOfComments = async (req: Request, res: Response, next: NextFunction) => {

@@ -13,7 +13,30 @@ import {userDeviceRepo} from "../repositories/users-device-repository";
 import {cryptoAdapter} from "../adapters/crypto-adapter";
 
 
+const obj  = [{}]
+ class nyArr {
+    myArrayMethod() {
+
+    }
+ }
+
+const arr = new nyArr()
+
+arr.myArrayMethod()
 export const authService = {
+
+    async checkUserCredential(loginOrEmail: string, password: string): Promise<ObjectId | null>{
+        const user = await usersRepository.findUserByLoginOrEmail(loginOrEmail)
+        if (!user) {
+            return null
+        }
+        const userHash = user.passwordHash
+        const isPasswordValid = cryptoAdapter.comparePassword(password, userHash)
+        if (!isPasswordValid) {
+            return null
+        }
+        return user._id
+    },
 
     async registerUser(login: string, password: string, email: string): Promise<string | null> {
 

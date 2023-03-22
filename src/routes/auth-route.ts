@@ -15,6 +15,7 @@ import {authRateLimiter} from "../middlewares/auth-rate-limiter";
 import {isEmailExistValidation} from "../middlewares/other-midlevares";
 import {usersQueryRepo} from "../repositories/users-query-repository";
 import {cryptoAdapter} from "../adapters/crypto-adapter";
+import {usersRepository} from "../repositories/users-repository";
 
 
 export const authRouter = Router({})
@@ -77,11 +78,13 @@ authRouter.post('/login',
     authRateLimiter.login,
     async (req: RequestWithBody<UserAuthModel>, res: Response) => {
         try {
-            const userId = await cryptoAdapter.checkCredentials(req.body.loginOrEmail, req.body.password)
-            if (userId) {
-                const {accessToken, refreshToken} = await authService.login(userId, req.ip, req.headers['user-agent']!)
-                res.status(200).cookie("refreshToken", refreshToken, {httpOnly: true, secure: true}).send({accessToken})
-            } else res.sendStatus(401)
+            const userId = await authService.checkUserCredential(req.body.loginOrEmail, req.body.password)
+            if(!userId) {
+                res.sendStatus(401)
+                return
+            }
+            const {accessToken, refreshToken} = await authService.login(userId, req.ip, req.headers['user-agent']!)
+            res.status(200).cookie("refreshToken", refreshToken, {httpOnly: true, secure: true}).send({accessToken})
         } catch (error) {
             res.status(500).send(`controller login error: ${(error as any).message}`)
         }

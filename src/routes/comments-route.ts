@@ -1,6 +1,5 @@
 import {Request, Response, Router} from "express";
-import {commentService, CommentsService} from "../domain/comment-service";
-import {LikeService} from "../domain/like-service";
+import {CommentsService} from "../domain/comment-service";
 import {authMiddleware, optionalAuthMiddleware} from "../middlewares/basic-auth.middleware";
 import {isUserOwnerOfComments} from "../middlewares/other-midlevares";
 import {
@@ -10,15 +9,12 @@ import {
 import {inputValidationMiddleware} from "../middlewares/input-validation-middleware/input-validation-middleware";
 import {commentsQueryRepo} from "../repositories/comments-query-repository";
 import {jwtService} from "../application/jwt-service";
+import {commentsControllerInstance} from "../compositions-root";
 
 export const commentsRouter = Router({})
 
-class CommentsController {
-    private commentsService: CommentsService
-    private likeService: LikeService
-    constructor() {
-        this.commentsService = new CommentsService()
-        this.likeService = new LikeService()
+export class CommentsController {
+    constructor(protected commentsService: CommentsService) {
     }
     async getCommentById(req: Request & {userId?: string}, res: Response) {
         try {
@@ -48,7 +44,7 @@ class CommentsController {
 
     async updateCommentById(req: Request, res: Response) {
         try {
-            let updateComment = await commentService.updateComment(
+            let updateComment = await this.commentsService.updateComment(
                 req.params.commentId.toString(),
                 req.body.content)
 
@@ -83,31 +79,27 @@ class CommentsController {
     }
 }
 
-export const commentControllerInstance = new CommentsController()
-
-
-
 commentsRouter.get('/:id',
     optionalAuthMiddleware,
-    commentControllerInstance.getCommentById)
+    commentsControllerInstance.getCommentById)
 
 commentsRouter.delete('/:commentId',
     authMiddleware,
     isUserOwnerOfComments,
-    commentControllerInstance.deleteCommentById)
+    commentsControllerInstance.deleteCommentById)
 
 commentsRouter.put('/:commentId',
     authMiddleware,
     isUserOwnerOfComments,
     commentContentValidation,
     inputValidationMiddleware,
-commentControllerInstance.updateCommentById)
+commentsControllerInstance.updateCommentById)
 
 commentsRouter.put('/:commentsId/like-status',
     authMiddleware,
     likeStatusValidation,
     inputValidationMiddleware,
-commentControllerInstance.setLikeStatusForComment)
+commentsControllerInstance.setLikeStatusForComment)
 
 //
 //GET return comment by id

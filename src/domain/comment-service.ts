@@ -5,14 +5,9 @@ import {UsersQueryRepo, usersQueryRepo} from "../repositories/users-query-reposi
 
 
 export class CommentsService {
-    commentsRepository: CommentsRepository
-    usersQueryRepo: UsersQueryRepo;
-    constructor() {
-        this.commentsRepository = new CommentsRepository()
-        this.usersQueryRepo = new UsersQueryRepo()
-    }
+    constructor(protected commentsRepository: CommentsRepository) {}
     async createComment(postId: string, content: string, userId: string,): Promise<string> {
-        const user = await this.usersQueryRepo.getUserById(userId)
+        const user = await usersQueryRepo.getUserById(userId)
         const newComment = new CommentDBType(
             new ObjectId(),
             "post",
@@ -42,8 +37,6 @@ export class CommentsService {
         return await this.commentsRepository.deleteAllComments()
     }
 }
-
-export const commentService = new CommentsService()
 
 // export const commentService = {
 //

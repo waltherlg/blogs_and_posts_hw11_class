@@ -10,7 +10,6 @@ export class LikeService {
     constructor(){
         this.usersRepository = new UsersRepository()
         this.commentsRepository = new CommentsRepository()
-        this.usersRepository = new UsersRepository()
     }
     async updateCommentLike(userId: string, commentsId: string, status: string){
         const isUserAlreadyLikeComment = this.usersRepository.isUserAlreadyLikeComment(userId, commentsId)
@@ -27,7 +26,7 @@ export class LikeService {
         console.log('CurrentStatus ' + currentStatus)
 
         if(currentStatus !== status){
-            await usersRepository.updateCommentsLikeObject(userId, commentsId, status)
+            await this.usersRepository.updateCommentsLikeObject(userId, commentsId, status)
             if(currentStatus === "None" && status === 'Like'){
                 await this.commentsRepository.increaseCommentsLikes(commentsId)
             }

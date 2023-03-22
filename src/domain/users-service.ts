@@ -5,7 +5,7 @@ import {usersQueryRepo} from "../repositories/users-query-repository";
 import {cryptoAdapter} from "../adapters/crypto-adapter";
 
 
-class UsersService {
+export class UsersService {
     async createUser(login: string, password: string, email: string): Promise<string> {
 
         const passwordHash = await cryptoAdapter.generateHash(password)

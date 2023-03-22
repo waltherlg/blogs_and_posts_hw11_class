@@ -1,8 +1,9 @@
 import {Response, Router} from "express";
 
-import {postsService} from "../domain/posts-service";
-import {commentService} from "../domain/comment-service";
+import {PostsService} from "../domain/posts-service";
+import {CommentsService} from "../domain/comment-service";
 import {commentsQueryRepo} from "../repositories/comments-query-repository";
+import {postsControllerInstance} from "../compositions-root";
 
 import {
     RequestWithBody,
@@ -35,7 +36,9 @@ import {postsQueryRepo} from "../repositories/post-query-repository";
 export const postsRouter = Router({})
 
 // GET Returns All posts
-class PostsController {
+export class PostsController {
+    constructor(protected postsService: PostsService) {
+    }
     async getAllPosts(req: RequestWithQuery<RequestPostsQueryModel>, res: Response) {
         try {
             let sortBy = req.query.sortBy ? req.query.sortBy : 'createdAt'
@@ -64,7 +67,7 @@ class PostsController {
 
     async createPost(req: RequestWithBody<CreatePostModel>, res: Response<PostTypeOutput>) {
         try {
-            const newPostResult = await postsService.createPost(
+            const newPostResult = await this.postsService.createPost(
                 req.body.title,
                 req.body.shortDescription,
                 req.body.content,
@@ -116,7 +119,7 @@ class PostsController {
 
     async updatePostById(req: RequestWithParamsAndBody<URIParamsPostModel, UpdatePostModel>, res: Response) {
         try {
-            const updatePost = await postsService.updatePost(
+            const updatePost = await this.postsService.updatePost(
                 req.params.postId,
                 req.body.title,
                 req.body.shortDescription,
@@ -134,7 +137,7 @@ class PostsController {
 
     async deletePostById(req: RequestWithParams<URIParamsPostModel>, res: Response) {
         try {
-            const isDeleted = await postsService.deletePost(req.params.postId)
+            const isDeleted = await this.postsService.deletePost(req.params.postId)
             if (isDeleted) {
                 return res.sendStatus(204)
             } else {
@@ -146,13 +149,11 @@ class PostsController {
     }
 }
 
-const postControllerInstance = new PostsController()
-
 postsRouter.get('/',
-    postControllerInstance.getAllPosts)
+    postsControllerInstance.getAllPosts)
 
 postsRouter.get('/:postId',
-    postControllerInstance.getPostById)
+    postsControllerInstance.getPostById)
 
 postsRouter.post('/',
     basicAuthMiddleware,
@@ -161,17 +162,17 @@ postsRouter.post('/',
     contentValidation,
     existBlogIdValidation,
     inputValidationMiddleware,
-    postControllerInstance.createPost)
+    postsControllerInstance.createPost)
 
 postsRouter.post('/:postId/comments',
     authMiddleware,
     commentContentValidation,
     inputValidationMiddleware,
-    postControllerInstance.createCommentByPostId)
+    postsControllerInstance.createCommentByPostId)
 
 postsRouter.get('/:postId/comments',
     optionalAuthMiddleware,
-    postControllerInstance.getCommentsByPostId)
+    postsControllerInstance.getCommentsByPostId)
 
 postsRouter.put('/:postId',
     basicAuthMiddleware,
@@ -180,11 +181,11 @@ postsRouter.put('/:postId',
     titleValidation,
     contentValidation,
     inputValidationMiddleware,
-    postControllerInstance.updatePostById)
+    postsControllerInstance.updatePostById)
 
 postsRouter.delete('/:postId',
     basicAuthMiddleware,
-    postControllerInstance.deletePostById)
+    postsControllerInstance.deletePostById)
 
 
 // postsRouter.get('/', async (req: RequestWithQuery<RequestPostsQueryModel>, res: Response) => {

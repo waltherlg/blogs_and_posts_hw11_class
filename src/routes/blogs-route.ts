@@ -1,6 +1,7 @@
 import {Request, Response, Router} from "express";
-import {blogsService} from "../domain/blogs-service";
-import {postsService} from "../domain/posts-service";
+import {BlogsService} from "../domain/blogs-service";
+import {PostsService, postsService} from "../domain/posts-service";
+import {blogsControllerInstance} from "../compositions-root";
 
 import {
     RequestWithBody,
@@ -33,7 +34,9 @@ import {blogsQueryRepo} from "../repositories/blog-query-repository";
 import {postsQueryRepo} from "../repositories/post-query-repository";
 import {usersControllerInstance} from "./users-route";
 
-class BlogsController {
+export class BlogsController {
+    constructor(protected blogsService: BlogsService, protected postService: PostsService) {
+    }
     async getAllBlogs(req: RequestWithQuery<RequestBlogsQueryModel>, res: Response) {
         try {
             let searchNameTerm = req.query.searchNameTerm ? req.query.searchNameTerm : ''
@@ -50,7 +53,7 @@ class BlogsController {
 
     async createBlog(req: RequestWithBody<CreateBlogModel>, res: Response) {
         try {
-            const newBlogsId = await blogsService.createBlog(
+            const newBlogsId = await this.blogsService.createBlog(
                 req.body.name,
                 req.body.description,
                 req.body.websiteUrl)
@@ -115,7 +118,7 @@ class BlogsController {
 
     async deleteBlogById(req: RequestWithParams<URIParamsBlogModel>, res: Response) {
         try {
-            const isDeleted = await blogsService.deleteBlog(req.params.id)
+            const isDeleted = await this.blogsService.deleteBlog(req.params.id)
             if (isDeleted) {
                 res.sendStatus(204)
             } else {
@@ -128,7 +131,7 @@ class BlogsController {
 
     async updateBlogById(req: RequestWithParamsAndBody<URIParamsBlogModel, UpdateBlogModel>, res: Response) {
         try {
-            const updateBlog = await blogsService.updateBlog(
+            const updateBlog = await this.blogsService.updateBlog(
                 req.params.id,
                 req.body.name,
                 req.body.description,
@@ -143,8 +146,6 @@ class BlogsController {
         }
     }
 }
-
-export const blogsControllerInstance = new BlogsController()
 
 blogsRouter.get('/',
     blogsControllerInstance.getAllBlogs)

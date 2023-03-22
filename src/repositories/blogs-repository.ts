@@ -3,7 +3,7 @@ import {ObjectId} from "mongodb";
 import {BlogDBType, BlogTypeOutput} from "../models/blogs-types";
 import {BlogModelClass} from "../schemes/schemes";
 
-class BlogsRepository {
+export class BlogsRepository {
     async createBlog(newBlog: BlogDBType): Promise<string> {
         const blogInstance = new BlogModelClass(newBlog)
         await blogInstance.save()
