@@ -1,15 +1,22 @@
 import {usersQueryRepo} from "../repositories/users-query-repository";
-import {usersRepository} from "../repositories/users-repository";
-import {commentsRepository} from "../repositories/comments-repository";
+import {UsersRepository, usersRepository} from "../repositories/users-repository";
+import {CommentsRepository} from "../repositories/comments-repository";
+import {th} from "date-fns/locale";
 
 
-export const likeService = {
+export class likeService {
+    usersRepository: UsersRepository
+    commentsRepository: CommentsRepository
+    constructor(){
+        this.usersRepository = new UsersRepository()
+        this.commentsRepository = new CommentsRepository()
+    }
     async updateCommentLike(userId: string, commentsId: string, status: string){
         const isUserAlreadyLikeComment = await usersQueryRepo.isUserAlreadyLikeComment(userId, commentsId)
         if (!isUserAlreadyLikeComment){
             const createdAt = new Date()
             const addedLike = await usersRepository.createCommentsLikeObject(userId, commentsId, createdAt, status)
-            const setCount = await commentsRepository.setCountCommentsLike(commentsId, status)
+            const setCount = await this.commentsRepository.setCountCommentsLike(commentsId, status)
             return addedLike
         }
         const likedComments = await usersQueryRepo.getUsersLikedComments(userId)
@@ -21,24 +28,24 @@ export const likeService = {
         if(currentStatus !== status){
             await usersRepository.updateCommentsLikeObject(userId, commentsId, status)
             if(currentStatus === "None" && status === 'Like'){
-                await commentsRepository.increaseCommentsLikes(commentsId)
+                await this.commentsRepository.increaseCommentsLikes(commentsId)
             }
             if(currentStatus === "None" && status === 'Dislike'){
-                await commentsRepository.increaseCommentsDislikes(commentsId)
+                await this.commentsRepository.increaseCommentsDislikes(commentsId)
             }
             if(currentStatus === 'Like' && status === 'None'){
-                await commentsRepository.decreaseCommentsLikes(commentsId)
+                await this.commentsRepository.decreaseCommentsLikes(commentsId)
             }
             if(currentStatus === 'Dislike' && status === 'None'){
-                await commentsRepository.decreaseCommentsDislikes(commentsId)
+                await this.commentsRepository.decreaseCommentsDislikes(commentsId)
             }
             if(currentStatus === 'Like' && status === 'Dislike'){
-                await commentsRepository.decreaseCommentsLikes(commentsId)
-                await commentsRepository.increaseCommentsDislikes(commentsId)
+                await this.commentsRepository.decreaseCommentsLikes(commentsId)
+                await this.commentsRepository.increaseCommentsDislikes(commentsId)
             }
             if(currentStatus === 'Dislike' && status === 'Like'){
-                await commentsRepository.decreaseCommentsDislikes(commentsId)
-                await commentsRepository.increaseCommentsLikes(commentsId)
+                await this.commentsRepository.decreaseCommentsDislikes(commentsId)
+                await this.commentsRepository.increaseCommentsLikes(commentsId)
             }
             return true
         } else return true

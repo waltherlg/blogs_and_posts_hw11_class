@@ -7,7 +7,7 @@ import {HydratedDocument} from "mongoose";
 
 //export const UserModel = client.db("blogsAndPosts").collection<userType>("users")
 
-class UsersRepository {
+export class UsersRepository {
     async save(user: HydratedDocument<UserDBType>){
         await user.save()
     }
