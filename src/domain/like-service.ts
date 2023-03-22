@@ -4,18 +4,19 @@ import {CommentsRepository} from "../repositories/comments-repository";
 import {th} from "date-fns/locale";
 
 
-export class likeService {
+export class LikeService {
     usersRepository: UsersRepository
     commentsRepository: CommentsRepository
     constructor(){
         this.usersRepository = new UsersRepository()
         this.commentsRepository = new CommentsRepository()
+        this.usersRepository = new UsersRepository()
     }
     async updateCommentLike(userId: string, commentsId: string, status: string){
-        const isUserAlreadyLikeComment = await usersQueryRepo.isUserAlreadyLikeComment(userId, commentsId)
+        const isUserAlreadyLikeComment = this.usersRepository.isUserAlreadyLikeComment(userId, commentsId)
         if (!isUserAlreadyLikeComment){
             const createdAt = new Date()
-            const addedLike = await usersRepository.createCommentsLikeObject(userId, commentsId, createdAt, status)
+            const addedLike = await this.usersRepository.createCommentsLikeObject(userId, commentsId, createdAt, status)
             const setCount = await this.commentsRepository.setCountCommentsLike(commentsId, status)
             return addedLike
         }
@@ -49,10 +50,5 @@ export class likeService {
             }
             return true
         } else return true
-        
-
-
-
-
     }
 }

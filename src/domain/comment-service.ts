@@ -4,7 +4,7 @@ import {CommentsRepository} from "../repositories/comments-repository";
 import {UsersQueryRepo, usersQueryRepo} from "../repositories/users-query-repository";
 
 
-class CommentService {
+export class CommentsService {
     commentsRepository: CommentsRepository
     usersQueryRepo: UsersQueryRepo;
     constructor() {
@@ -43,7 +43,7 @@ class CommentService {
     }
 }
 
-export const commentService = new CommentService()
+export const commentService = new CommentsService()
 
 // export const commentService = {
 //

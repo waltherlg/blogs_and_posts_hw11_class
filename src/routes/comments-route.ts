@@ -1,6 +1,6 @@
 import {Request, Response, Router} from "express";
-import {commentService} from "../domain/comment-service";
-import {likeService} from "../domain/like-service";
+import {commentService, CommentsService} from "../domain/comment-service";
+import {LikeService} from "../domain/like-service";
 import {authMiddleware, optionalAuthMiddleware} from "../middlewares/basic-auth.middleware";
 import {isUserOwnerOfComments} from "../middlewares/other-midlevares";
 import {
@@ -14,6 +14,12 @@ import {jwtService} from "../application/jwt-service";
 export const commentsRouter = Router({})
 
 class CommentsController {
+    private commentsService: CommentsService
+    private likeService: LikeService
+    constructor() {
+        this.commentsService = new CommentsService()
+        this.likeService = new LikeService()
+    }
     async getCommentById(req: Request & {userId?: string}, res: Response) {
         try {
             let foundComment = await commentsQueryRepo.getCommentById(req.params.id.toString(), req.userId)
@@ -29,7 +35,7 @@ class CommentsController {
 
     async deleteCommentById(req: Request, res: Response) {
         try {
-            let isDeleted = await commentService.deleteComment(req.params.commentId.toString())
+            let isDeleted = await this.commentsService.deleteComment(req.params.commentId.toString())
             if (isDeleted) {
                 res.sendStatus(204)
             } else {
@@ -64,7 +70,7 @@ class CommentsController {
             }
             const token = req.headers.authorization!.split(' ')[1]
             const userId = await jwtService.getUserIdFromRefreshToken(token)
-            let updateCommentLike = await likeService.updateCommentLike(
+            let updateCommentLike = await this.likeService.updateCommentLike(
                 userId,
                 req.params.commentsId.toString(),
                 req.body.likeStatus)

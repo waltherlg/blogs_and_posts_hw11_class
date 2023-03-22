@@ -117,6 +117,15 @@ export class UsersRepository {
         )
         return true
     }
+
+    async isUserAlreadyLikeComment(userId: string, commentsId: string): Promise<boolean> {
+        if(!ObjectId.isValid(userId)){
+            return false
+        }
+        let _id = new ObjectId(userId)
+        const isExist = await UserModel.findOne({_id: _id, likedComments: {$elemMatch: {commentsId: commentsId}}})
+        return !!isExist
+    }
 }
 
 export const usersRepository = new UsersRepository()
