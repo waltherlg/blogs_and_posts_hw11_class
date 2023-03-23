@@ -10,11 +10,12 @@ import {inputValidationMiddleware} from "../middlewares/input-validation-middlew
 import {commentsQueryRepo} from "../repositories/comments-query-repository";
 import {jwtService} from "../application/jwt-service";
 import {commentsControllerInstance} from "../compositions-root";
+import {LikeService} from "../domain/like-service";
 
 export const commentsRouter = Router({})
 
 export class CommentsController {
-    constructor(protected commentsService: CommentsService) {
+    constructor(protected commentsService: CommentsService, protected likeService: LikeService) {
     }
     async getCommentById(req: Request & {userId?: string}, res: Response) {
         try {

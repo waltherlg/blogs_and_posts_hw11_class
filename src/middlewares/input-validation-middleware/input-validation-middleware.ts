@@ -1,12 +1,8 @@
 
 import {NextFunction, Request, Response} from "express";
 import {body, validationResult} from "express-validator";
-import {param} from "express-validator";
-import {blogsService} from "../../domain/blogs-service";
-import {usersService} from "../../domain/users-service";
-import {authService} from "../../domain/auth-service";
 import {blogsQueryRepo} from "../../repositories/blog-query-repository";
-import {commentsQueryRepo} from "../../repositories/comments-query-repository";
+import {checkService} from "../../domain/check-service";
 
 
 
@@ -33,7 +29,7 @@ export const loginValidation = body('login')
     .isLength({min: 3, max: 10}).bail().withMessage({"message": "wrong length login", "field": "login" })
     .matches('^[a-zA-Z0-9_-]*$').bail().withMessage({"message": "wrong symbols in login", "field": "login" })
     .custom(async value => {
-        const isLoginExist = await usersService.isLoginExist(value)
+        const isLoginExist = await checkService.isLoginExist(value)
         if (isLoginExist) throw new Error
     }).bail().withMessage({"message": "login already exist", "field": "login" })
 
@@ -58,7 +54,7 @@ export const emailValidation = body('email')
     .trim().bail().withMessage({"message": "email is not string", "field": "email" })
     .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/).bail().withMessage({"message": "wrong symbols in email", "field": "email" })
     .custom(async value => {
-        const isEmailExist = await usersService.isEmailExist(value)
+        const isEmailExist = await checkService.isEmailExist(value)
         if (isEmailExist) throw new Error
     }).bail().withMessage({"message": "email already using", "field": "email" })
 
@@ -76,11 +72,11 @@ export const emailResendingValidation = body('email')
     .trim().bail().withMessage({"message": "email is not string", "field": "email" })
     .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/).bail().withMessage({"message": "wrong symbols in email", "field": "email" })
     .custom(async value => {
-        const isEmailExist = await usersService.isEmailExist(value)
+        const isEmailExist = await checkService.isEmailExist(value)
         if (!isEmailExist) throw new Error
     }).bail().withMessage({"message": "email not exist", "field": "email" })
     .custom(async value => {
-        const isEmailConfirmed = await usersService.isEmailConfirmed(value)
+        const isEmailConfirmed = await checkService.isEmailConfirmed(value)
         if (isEmailConfirmed) throw new Error
     }).bail().withMessage({"message": "email already confirmed", "field": "email" })
 
@@ -89,11 +85,11 @@ export const confirmationCodeValidation = body('code')
     .isString().bail().withMessage({"message": "code is not string", "field": "code" })
     .trim().bail().withMessage({message: "code is not string", field: "code" })
     .custom(async value => {
-        const isCodeExist = await authService.isConfirmationCodeExist(value)
+        const isCodeExist = await checkService.isConfirmationCodeExist(value)
         if (!isCodeExist) throw new Error
     }).bail().withMessage({"message": "confirmation code not exist", "field": "code" })
     .custom(async value => {
-        const isCodeConfirmed = await usersService.isCodeConfirmed(value)
+        const isCodeConfirmed = await checkService.isCodeConfirmed(value)
         if (isCodeConfirmed) throw new Error
     }).bail().withMessage({"message": "already Confirmed", "field": "code" })
 
@@ -102,7 +98,7 @@ export const passwordRecoveryCodeValidation = body('recoveryCode')
     .isString().bail().withMessage({"message": "recoveryCode is not string", "field": "recoveryCode" })
     .trim().bail().withMessage({message: "code is not string", field: "recoveryCode" })
     .custom(async value => {
-        const isCodeExist = await authService.isRecoveryCodeExist(value)
+        const isCodeExist = await checkService.isRecoveryCodeExist(value)
         if (!isCodeExist) throw new Error
     }).bail().withMessage({"message": "recovery code not exist", "field": "recoveryCode" })
 

@@ -1,6 +1,5 @@
 import {ObjectId} from "mongodb";
 import {UserDBType, UserTypeOutput} from "../models/users-types";
-import {usersService} from "../domain/users-service";
 import {PasswordRecoveryModel} from "../models/users-models";
 import {UserModel} from "../schemes/schemes";
 import {HydratedDocument} from "mongoose";
@@ -127,8 +126,6 @@ export class UsersRepository {
         return !!isExist
     }
 }
-
-export const usersRepository = new UsersRepository()
 
 // export const usersRepository = {
 //

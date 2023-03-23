@@ -10,29 +10,31 @@ import {BlogsController} from "./routes/blogs-route";
 import {UsersRepository} from "./repositories/users-repository";
 import {UsersService} from "./domain/users-service";
 import {UsersController} from "./routes/users-route";
+import {LikeService} from "./domain/like-service";
+import {AuthService} from "./domain/auth-service";
+import {AuthController} from "./routes/auth-route";
 
-class PostUsersSevice {
-    getUsersByPosts()
-}
 
-const blogsRepository1 = new BlogsMongRepository()
-const blogsRepository2 = new BlogsSqlRepository()
 
-const blogsService = new BlogsService(blogsRepository2)
+const blogsRepository = new BlogsRepository()
+const blogsService = new BlogsService(blogsRepository)
+
 const postsRepository = new PostsRepository()
 const postsService = new PostsService(postsRepository)
-export const blogsControllerInstance = new BlogsController(blogsService, postsService)
-
 
 const commentsRepository = new CommentsRepository()
 const commentsService = new CommentsService(commentsRepository)
-export const commentsControllerInstance = new CommentsController(commentsService)
 
-
-
-export const postsControllerInstance = new PostsController(postsService)
-
-const usersRepository = new UsersRepository()
+export const usersRepository = new UsersRepository()
 const usersService = new UsersService(usersRepository)
+
+const likeService = new LikeService(commentsRepository, usersRepository)
+
+const authService = new AuthService(usersRepository)
+
+export const blogsControllerInstance = new BlogsController(blogsService, postsService)
+export const commentsControllerInstance = new CommentsController(commentsService, likeService)
+export const postsControllerInstance = new PostsController(postsService, commentsService)
 export const usersControllerInstance = new UsersController(usersService)
+export const authControllerInstance = new AuthController(authService, usersService)
 

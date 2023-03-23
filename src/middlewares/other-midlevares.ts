@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from "express";
-import {usersService} from "../domain/users-service";
 import {deviceService} from "../domain/device-service";
 import {commentsQueryRepo} from "../repositories/comments-query-repository";
+import {checkService} from "../domain/check-service";
 
 
 
@@ -35,7 +35,7 @@ export const isUserOwnerOfDevice = async (req: Request, res: Response, next: Nex
 }
 
 export const isEmailExistValidation = async (req: Request, res: Response, next: NextFunction) => {
-    const isEmailExist = await usersService.isEmailExist(req.body.email)
+    const isEmailExist = await checkService.isEmailExist(req.body.email)
     if (!isEmailExist) {
         res.sendStatus(204)
         return

@@ -1,16 +1,14 @@
 import {ObjectId} from "mongodb";
 import {UserDBType, UserTypeOutput} from "../models/users-types";
 import {UserDeviceDBType} from "../models/types";
-import {usersRepository} from "../repositories/users-repository";
-import * as bcrypt from 'bcrypt'
 import {v4 as uuid4} from 'uuid'
 import add from 'date-fns/add'
 import {emailManager} from "../managers/email-manager";
-import {usersService} from "./users-service";
 import {jwtService} from "../application/jwt-service";
 import {deviceService} from "./device-service";
 import {userDeviceRepo} from "../repositories/users-device-repository";
 import {cryptoAdapter} from "../adapters/crypto-adapter";
+import {UsersRepository} from "../repositories/users-repository";
 
 
 const obj  = [{}]
@@ -23,10 +21,12 @@ const obj  = [{}]
 const arr = new nyArr()
 
 arr.myArrayMethod()
-export const authService = {
+export class AuthService {
+    constructor(protected usersRepository: UsersRepository) {
+    }
 
     async checkUserCredential(loginOrEmail: string, password: string): Promise<ObjectId | null>{
-        const user = await usersRepository.findUserByLoginOrEmail(loginOrEmail)
+        const user = await this.usersRepository.findUserByLoginOrEmail(loginOrEmail)
         if (!user) {
             return null
         }
@@ -36,7 +36,7 @@ export const authService = {
             return null
         }
         return user._id
-    },
+    }
 
     async registerUser(login: string, password: string, email: string): Promise<string | null> {
 
@@ -60,27 +60,27 @@ export const authService = {
             'likedComments': [],
             'likedPosts': []
         }
-        const createdUser = await usersRepository.createUser(newUser)
+        const createdUser = await this.usersRepository.createUser(newUser)
 
         try {
             await emailManager.sendEmailConfirmationMessage(newUser)
         }
         catch (e) {
-            await usersService.deleteUser(newUser._id.toString())
+            await this.usersRepository.deleteUser(newUser._id.toString())
             return null
         }
         return createdUser._id.toString()
-    },
+    }
 
     async confirmEmail(code: string): Promise<boolean>{
-        let user = await usersRepository.getUserByConfirmationCode(code)
+        let user = await this.usersRepository.getUserByConfirmationCode(code)
         if (!user) return false
         if (user.expirationDateOfConfirmationCode! > new Date()){
-            let result = await usersRepository.updateConfirmation(code)
+            let result = await this.usersRepository.updateConfirmation(code)
             return result
         }
         return false
-    },
+    }
 
     async registrationEmailResending(email: string){
         const refreshConfirmationData = {
@@ -97,9 +97,9 @@ export const authService = {
         catch (e) {
             return false
         }
-        let result = await usersRepository.refreshConfirmationCode(refreshConfirmationData)
+        let result = await this.usersRepository.refreshConfirmationCode(refreshConfirmationData)
         return result
-    },
+    }
 
     async passwordRecovery(email: string){
         const passwordRecoveryData = {
@@ -116,35 +116,20 @@ export const authService = {
         catch (e) {
             return null
         }
-        let result = await usersRepository.addPasswordRecoveryData(passwordRecoveryData)
+        let result = await this.usersRepository.addPasswordRecoveryData(passwordRecoveryData)
         return result
-    },
-
-    async isConfirmationCodeExist(code: string){
-        let user = await usersRepository.getUserByConfirmationCode(code)
-        return !!user;
-    },
+    }
 
     async newPasswordSet(newPassword: string, recoveryCode: string){
-        let user = await usersRepository.getUserByPasswordRecoveryCode(recoveryCode)
+        let user = await this.usersRepository.getUserByPasswordRecoveryCode(recoveryCode)
         if (!user) return false
         if (user.expirationDateOfRecoveryCode! > new Date()){
             const passwordHash = await cryptoAdapter.generateHash(newPassword)
-            let result = await usersRepository.newPasswordSet(user._id, passwordHash)
+            let result = await this.usersRepository.newPasswordSet(user._id, passwordHash)
             return result
         }
         return false
-    },
-
-    async isRecoveryCodeExist(code: string){
-        let isExist = await usersRepository.getUserByPasswordRecoveryCode(code)
-        return !!isExist;
-    },
-
-    // async isTokenExpired(refreshToken: string){
-    //     const isToken = await expiredTokenRepository.findExpiredToken(refreshToken)
-    //     return !!isToken
-    // },
+    }
 
     async login(userId: ObjectId, ip: string, userAgent: string) {
         const deviceId = new ObjectId()
@@ -162,12 +147,12 @@ export const authService = {
         }
         await userDeviceRepo.addDeviceInfo(deviceInfo)
         return { accessToken, refreshToken }
-    },
+    }
 //
     async logout(userId: string, deviceId: string): Promise<boolean>{
         const isDeviceDeleted = await deviceService.deleteUserDeviceById(userId, deviceId)
         return isDeviceDeleted
-    },
+    }
 
     async refreshingToken(refreshToken: string){
         const deviceId = jwtService.getDeviceIdFromRefreshToken(refreshToken)

@@ -37,7 +37,7 @@ export const postsRouter = Router({})
 
 // GET Returns All posts
 export class PostsController {
-    constructor(protected postsService: PostsService) {
+    constructor(protected postsService: PostsService, protected commentService: CommentsService) {
     }
     async getAllPosts(req: RequestWithQuery<RequestPostsQueryModel>, res: Response) {
         try {
@@ -85,7 +85,7 @@ export class PostsController {
                 res.sendStatus(404)
                 return
             }
-            const newCommentId = await commentService.createComment(
+            const newCommentId = await this.commentService.createComment(
                 req.params.postId,
                 req.body.content,
                 req.userId)

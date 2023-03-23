@@ -1,16 +1,13 @@
 import {usersQueryRepo} from "../repositories/users-query-repository";
-import {UsersRepository, usersRepository} from "../repositories/users-repository";
+import {UsersRepository} from "../repositories/users-repository";
 import {CommentsRepository} from "../repositories/comments-repository";
 import {th} from "date-fns/locale";
 
 
 export class LikeService {
-    usersRepository: UsersRepository
-    commentsRepository: CommentsRepository
-    constructor(){
-        this.usersRepository = new UsersRepository()
-        this.commentsRepository = new CommentsRepository()
+    constructor(protected commentsRepository: CommentsRepository, protected usersRepository: UsersRepository) {
     }
+
     async updateCommentLike(userId: string, commentsId: string, status: string){
         const isUserAlreadyLikeComment = this.usersRepository.isUserAlreadyLikeComment(userId, commentsId)
         if (!isUserAlreadyLikeComment){

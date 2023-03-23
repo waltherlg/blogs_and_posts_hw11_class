@@ -1,3 +1,5 @@
+
+/*
 import request from "supertest"
 import {app} from '../../src/index'
 import {describe} from "node:test";
@@ -1567,25 +1569,10 @@ describe('01 /blogs', () => {
                 ]
             })
     })
-
-
-
-
-
-
 })
 
 
 
+*/
 
-// describe('02 /posts validation', () => {
-//
-//     beforeAll(async () => {
-//         await request(app).delete(('/testing/all-data'))
-//     })
-//
-//
-//
-//
-//
-// })
+

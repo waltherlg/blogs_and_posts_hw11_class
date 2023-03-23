@@ -1,5 +1,4 @@
 import * as bcrypt from 'bcrypt'
-import {usersRepository} from "../repositories/users-repository";
 
 
 export const bcryptService = {

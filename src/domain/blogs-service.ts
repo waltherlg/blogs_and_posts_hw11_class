@@ -1,20 +1,9 @@
-import {BlogsRepository, blogsRepository} from "../repositories/blogs-repository";
+import {BlogsRepository} from "../repositories/blogs-repository";
 import {ObjectId} from "mongodb";
 import {BlogDBType,BlogTypeOutput} from "../models/blogs-types";
-import {blogsQueryRepo} from "../repositories/blog-query-repository";
-interface IBlogRepository{
-    getById() {
-
-}
-
-class BlogMongoRepo implements IBlogRepository {
-    getById(): Dto {
-    }
-    }
-}
 
 export class BlogsService {
-    constructor(protected blogsRepository: IBlogRepository) {
+    constructor(protected blogsRepository: BlogsRepository) {
     }
     async createBlog(name: string, description: string, websiteUrl: string): Promise<string> {
         const newBlog = new BlogDBType(
