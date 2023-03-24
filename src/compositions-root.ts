@@ -1,6 +1,5 @@
 import {CommentsRepository} from "./repositories/comments-repository";
 import {CommentsService} from "./domain/comment-service";
-import {CommentsController} from "./routes/comments-route";
 import {PostsRepository} from "./repositories/posts-repository";
 import {PostsService} from "./domain/posts-service";
 import {PostsController} from "./routes/posts-route";
@@ -14,6 +13,7 @@ import {LikeService} from "./domain/like-service";
 import {AuthService} from "./domain/auth-service";
 import {AuthController} from "./routes/auth-route";
 import {CommentsQueryRepo} from "./repositories/comments-query-repository";
+import {CommentsController} from "./routes/comments-controller";
 
 const commentsQueryRepo = new CommentsQueryRepo()
 
