@@ -68,13 +68,13 @@ usersRouter.post('/',
     passwordValidation,
     emailValidation,
     inputValidationMiddleware,
-    usersControllerInstance.createUser)
+    usersControllerInstance.createUser.bind(usersControllerInstance))
 
 usersRouter.delete('/:id',
     basicAuthMiddleware,
-    usersControllerInstance.deleteUser)
+    usersControllerInstance.deleteUser.bind(usersControllerInstance))
 
 usersRouter.get('/',
     basicAuthMiddleware,
-    usersControllerInstance.getUsers)
+    usersControllerInstance.getUsers.bind(usersControllerInstance))
 

@@ -140,47 +140,47 @@ authRouter.post('/registration',
     passwordValidation,
     emailValidation,
     inputValidationMiddleware,
-    authControllerInstance.registration)
+    authControllerInstance.registration.bind(authControllerInstance))
 
 authRouter.post('/registration-email-resending',
     authRateLimiter.emailResending,
     emailResendingValidation,
     inputValidationMiddleware,
-    authControllerInstance.registrationEmailResending)
+    authControllerInstance.registrationEmailResending.bind(authControllerInstance))
 
 authRouter.post('/registration-confirmation',
     authRateLimiter.registrationConfirmation,
     confirmationCodeValidation,
     inputValidationMiddleware,
-    authControllerInstance.registrationConfirmation)
+    authControllerInstance.registrationConfirmation.bind(authControllerInstance))
 
 authRouter.post('/login',
     authRateLimiter.login,
-    authControllerInstance.login)
+    authControllerInstance.login.bind(authControllerInstance))
 
 authRouter.post('/refresh-token',
     refreshTokenCheck,
-    authControllerInstance.refreshToken)
+    authControllerInstance.refreshToken.bind(authControllerInstance))
 
 authRouter.get('/me',
     authMiddleware,
-    authControllerInstance.currentUserInfo)
+    authControllerInstance.currentUserInfo.bind(authControllerInstance))
 
 authRouter.post('/logout',
     refreshTokenCheck,
-    authControllerInstance.logout)
+    authControllerInstance.logout.bind(authControllerInstance))
 
 authRouter.post('/password-recovery',
     authRateLimiter.passwordRecovery,
     emailValidationForRecovery,
     inputValidationMiddleware,
     isEmailExistValidation,
-    authControllerInstance.passwordRecovery)
+    authControllerInstance.passwordRecovery.bind(authControllerInstance))
 
 authRouter.post('/new-password',
     authRateLimiter.newPassword,
     newPasswordValidation,
     passwordRecoveryCodeValidation,
     inputValidationMiddleware,
-    authControllerInstance.newPasswordSet)
+    authControllerInstance.newPasswordSet.bind(authControllerInstance))
 

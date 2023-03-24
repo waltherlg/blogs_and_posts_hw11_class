@@ -83,13 +83,18 @@ export class CommentsQueryRepo {
             return null
         }
         let myStatus = 'None'
-        const user: UserDBType | null = await UserModel.findOne({_id: new ObjectId(userId)})
-        if (user){
-            let likedComment = user.likedComments.find(e => e.commentsId === id)
-            if (likedComment){
-                myStatus = likedComment.status
+        if (userId) {
+            if (ObjectId.isValid(userId)) {
+                const user: UserDBType | null = await UserModel.findOne({_id: new ObjectId(userId)})
+                if (user) {
+                    let likedComment = user.likedComments.find(e => e.commentsId === id)
+                    if (likedComment) {
+                        myStatus = likedComment.status
+                    }
+                }
             }
         }
+
         return {
             id: comment._id.toString(),
             content: comment.content,

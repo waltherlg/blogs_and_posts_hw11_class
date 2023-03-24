@@ -13,8 +13,9 @@ import {UsersController} from "./routes/users-route";
 import {LikeService} from "./domain/like-service";
 import {AuthService} from "./domain/auth-service";
 import {AuthController} from "./routes/auth-route";
+import {CommentsQueryRepo} from "./repositories/comments-query-repository";
 
-
+const commentsQueryRepo = new CommentsQueryRepo()
 
 const blogsRepository = new BlogsRepository()
 const blogsService = new BlogsService(blogsRepository)
@@ -33,7 +34,7 @@ const likeService = new LikeService(commentsRepository, usersRepository)
 const authService = new AuthService(usersRepository)
 
 export const blogsControllerInstance = new BlogsController(blogsService, postsService)
-export const commentsControllerInstance = new CommentsController(commentsService, likeService)
+export const commentsControllerInstance = new CommentsController(commentsService, likeService, commentsQueryRepo)
 export const postsControllerInstance = new PostsController(postsService, commentsService)
 export const usersControllerInstance = new UsersController(usersService)
 export const authControllerInstance = new AuthController(authService, usersService)

@@ -147,7 +147,7 @@ export class BlogsController {
 }
 
 blogsRouter.get('/',
-    blogsControllerInstance.getAllBlogs)
+    blogsControllerInstance.getAllBlogs.bind(blogsControllerInstance))
 
 blogsRouter.post('/',
     basicAuthMiddleware,
@@ -155,7 +155,7 @@ blogsRouter.post('/',
     descriptionValidation,
     websiteUrlValidation,
     inputValidationMiddleware,
-    blogsControllerInstance.createBlog)
+    blogsControllerInstance.createBlog.bind(blogsControllerInstance))
 
 blogsRouter.post('/:blogId/posts',
     basicAuthMiddleware,
@@ -163,17 +163,17 @@ blogsRouter.post('/:blogId/posts',
     shortDescriptionValidation,
     contentValidation,
     inputValidationMiddleware,
-    blogsControllerInstance.createPostByBlogsId)
+    blogsControllerInstance.createPostByBlogsId.bind(blogsControllerInstance))
 
 blogsRouter.get('/:id',
-    blogsControllerInstance.getBlogById)
+    blogsControllerInstance.getBlogById.bind(blogsControllerInstance))
 
 blogsRouter.get('/:id/posts',
-    blogsControllerInstance.getAllPostsByBlogsId)
+    blogsControllerInstance.getAllPostsByBlogsId.bind(blogsControllerInstance))
 
 blogsRouter.delete('/:id',
     basicAuthMiddleware,
-    blogsControllerInstance.deleteBlogById)
+    blogsControllerInstance.deleteBlogById.bind(blogsControllerInstance))
 
 blogsRouter.put('/:id',
     basicAuthMiddleware,
@@ -181,7 +181,7 @@ blogsRouter.put('/:id',
     descriptionValidation,
     websiteUrlValidation,
     inputValidationMiddleware,
-    blogsControllerInstance.updateBlogById)
+    blogsControllerInstance.updateBlogById.bind(blogsControllerInstance))
 
 
 

@@ -150,10 +150,10 @@ export class PostsController {
 }
 
 postsRouter.get('/',
-    postsControllerInstance.getAllPosts)
+    postsControllerInstance.getAllPosts.bind(postsControllerInstance))
 
 postsRouter.get('/:postId',
-    postsControllerInstance.getPostById)
+    postsControllerInstance.getPostById.bind(postsControllerInstance))
 
 postsRouter.post('/',
     basicAuthMiddleware,
@@ -162,17 +162,17 @@ postsRouter.post('/',
     contentValidation,
     existBlogIdValidation,
     inputValidationMiddleware,
-    postsControllerInstance.createPost)
+    postsControllerInstance.createPost.bind(postsControllerInstance))
 
 postsRouter.post('/:postId/comments',
     authMiddleware,
     commentContentValidation,
     inputValidationMiddleware,
-    postsControllerInstance.createCommentByPostId)
+    postsControllerInstance.createCommentByPostId.bind(postsControllerInstance))
 
 postsRouter.get('/:postId/comments',
     optionalAuthMiddleware,
-    postsControllerInstance.getCommentsByPostId)
+    postsControllerInstance.getCommentsByPostId.bind(postsControllerInstance))
 
 postsRouter.put('/:postId',
     basicAuthMiddleware,
@@ -181,11 +181,11 @@ postsRouter.put('/:postId',
     titleValidation,
     contentValidation,
     inputValidationMiddleware,
-    postsControllerInstance.updatePostById)
+    postsControllerInstance.updatePostById.bind(postsControllerInstance))
 
 postsRouter.delete('/:postId',
     basicAuthMiddleware,
-    postsControllerInstance.deletePostById)
+    postsControllerInstance.deletePostById.bind(postsControllerInstance))
 
 
 // postsRouter.get('/', async (req: RequestWithQuery<RequestPostsQueryModel>, res: Response) => {
