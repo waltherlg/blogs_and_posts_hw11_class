@@ -56,6 +56,7 @@ export class CommentsController {
             const isCommentExist = await commentsQueryRepo.getCommentById(req.params.commentsId.toString())
             if (!isCommentExist) {
                 res.sendStatus(404)
+                return
             }
             const token = req.headers.authorization!.split(' ')[1]
             const userId = await jwtService.getUserIdFromRefreshToken(token)
