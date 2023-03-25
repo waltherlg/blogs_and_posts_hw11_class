@@ -17,7 +17,7 @@ export class UsersController {
                 req.body.email)
             const newUser = await usersQueryRepo.getUserById(newUserId)
             if (!newUser) {
-                res.sendStatus(500)
+                res.status(500).send('cant return created user')
             }
             res.status(201).send(newUser)
         } catch (error) {
