@@ -41,8 +41,6 @@ export class BlogsRepository {
     }
 }
 
-export const blogsRepository = new BlogsRepository()
-
 // export const blogsRepository = {
 //
 //     async createBlog(newBlog: BlogDBType): Promise<string> {
