@@ -18,7 +18,7 @@ export class CommentsController {
                 res.sendStatus(404)
             }
         } catch (error) {
-            res.status(500).send(`controller get comment by id error: ${(error as any).message}`)
+            res.status(400).send(`controller get comment by id error: ${(error as any).message}`)
         }
     }
 
@@ -31,7 +31,7 @@ export class CommentsController {
                 res.sendStatus(404)
             }
         } catch (error) {
-            res.status(500).send(`controller delete comment by id error: ${(error as any).message}`)
+            res.status(400).send(`controller delete comment by id error: ${(error as any).message}`)
         }
     }
 
@@ -47,7 +47,7 @@ export class CommentsController {
                 res.sendStatus(404)
             }
         } catch (error) {
-            res.status(500).send(`controller update comment by id error: ${(error as any).message}`)
+            res.status(400).send(`controller update comment by id error: ${(error as any).message}`)
         }
     }
 
@@ -67,7 +67,7 @@ export class CommentsController {
                 res.sendStatus(204)
             } else res.status(400).send('not like')
         } catch (error) {
-            res.status(500).send(`controller comment like status error: ${(error as any).message}`)
+            res.status(400).send(`controller comment like status error: ${(error as any).message}`)
         }
     }
 }

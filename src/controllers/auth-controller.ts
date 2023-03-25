@@ -22,7 +22,7 @@ export class AuthController {
                 res.sendStatus(400)
             }
         } catch (error) {
-            res.status(500).send(`controller registration error: ${(error as any).message}`)
+            res.status(400).send(`controller registration error: ${(error as any).message}`)
         }
     }
 
@@ -33,7 +33,7 @@ export class AuthController {
                 res.sendStatus(204)
             } else res.sendStatus(400)
         } catch (error) {
-            res.status(500).send(`controller registration-email-resending error: ${(error as any).message}`)
+            res.status(400).send(`controller registration-email-resending error: ${(error as any).message}`)
         }
     }
 
@@ -44,7 +44,7 @@ export class AuthController {
                 res.sendStatus(204)
             } else res.sendStatus(400)
         } catch (error) {
-            res.status(500).send(`controller registration-confirmation error: ${(error as any).message}`)
+            res.status(400).send(`controller registration-confirmation error: ${(error as any).message}`)
         }
     }
 
@@ -58,7 +58,7 @@ export class AuthController {
             const {accessToken, refreshToken} = await this.authService.login(userId, req.ip, req.headers['user-agent']!)
             res.status(200).cookie("refreshToken", refreshToken, {httpOnly: true, secure: true}).send({accessToken})
         } catch (error) {
-            res.status(500).send(`controller login error: ${(error as any).message}`)
+            res.status(400).send(`controller login error: ${(error as any).message}`)
         }
     }
 
@@ -70,7 +70,7 @@ export class AuthController {
                 secure: true
             }).send({accessToken})
         } catch (error) {
-            res.status(500).send(`controller refresh-token error: ${(error as any).message}`)
+            res.status(400).send(`controller refresh-token error: ${(error as any).message}`)
         }
     }
 
@@ -79,7 +79,7 @@ export class AuthController {
             const currentUserInfo = await this.usersService.currentUserInfo(req.userId)
             res.status(200).send(currentUserInfo)
         } catch (error) {
-            res.status(500).send(`controller me error: ${(error as any).message}`)
+            res.status(400).send(`controller me error: ${(error as any).message}`)
         }
     }
 
@@ -89,7 +89,7 @@ export class AuthController {
             if (isLogout) res.cookie("refreshToken", "", {httpOnly: true, secure: true}).sendStatus(204)
             else res.status(404).send("no logout")
         } catch (error) {
-            res.status(500).send(`controller logout error: ${(error as any).message}`)
+            res.status(400).send(`controller logout error: ${(error as any).message}`)
         }
     }
 
@@ -100,7 +100,7 @@ export class AuthController {
                 res.sendStatus(204)
             } else res.sendStatus(404)
         } catch (error) {
-            res.status(500).send(`controller password-recovery error: ${(error as any).message}`)
+            res.status(400).send(`controller password-recovery error: ${(error as any).message}`)
         }
 
     }
@@ -112,7 +112,7 @@ export class AuthController {
                 res.sendStatus(204)
             } else res.sendStatus(400)
         } catch (error) {
-            res.status(500).send(`controller new-password error: ${(error as any).message}`)
+            res.status(400).send(`controller new-password error: ${(error as any).message}`)
         }
 
     }

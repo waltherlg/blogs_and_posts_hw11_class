@@ -17,11 +17,11 @@ export class UsersController {
                 req.body.email)
             const newUser = await usersQueryRepo.getUserById(newUserId)
             if (!newUser) {
-                res.status(500).send('cant return created user')
+                res.status(400).send('cant return created user')
             }
             res.status(201).send(newUser)
         } catch (error) {
-            res.status(500).send(`controller create user error: ${(error as any).message}`)
+            res.status(400).send(`controller create user error: ${(error as any).message}`)
         }
     }
 
@@ -34,7 +34,7 @@ export class UsersController {
                 res.sendStatus(404)
             }
         } catch (error) {
-            res.status(500).send(`controller delete user by id error: ${(error as any).message}`)
+            res.status(400).send(`controller delete user by id error: ${(error as any).message}`)
         }
     }
 
@@ -49,7 +49,7 @@ export class UsersController {
             const allUsers = await usersQueryRepo.getAllUsers(sortBy, sortDirection, pageNumber, pageSize, searchLoginTerm, searchEmailTerm)
             res.status(200).send(allUsers)
         } catch (error) {
-            res.status(500).send(`controller get users error: ${(error as any).message}`)
+            res.status(400).send(`controller get users error: ${(error as any).message}`)
         }
     }
 }

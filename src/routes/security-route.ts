@@ -14,7 +14,7 @@ securityRouter.get('/devices',
             const usersDevises = await deviceService.getActiveUserDevices(req.userId!)
             res.status(200).send(usersDevises)
         } catch (error) {
-            res.status(500).send(`controller security get devices error: ${(error as any).message}`)
+            res.status(400).send(`controller security get devices error: ${(error as any).message}`)
         }
     })
 
@@ -26,7 +26,7 @@ securityRouter.delete('/devices',
             if (isAllUsersDevisesDeleted) return res.sendStatus(204)
             else res.sendStatus(404)
         } catch (error) {
-            res.status(500).send(`controller security delete devices error: ${(error as any).message}`)
+            res.status(400).send(`controller security delete devices error: ${(error as any).message}`)
         }
     })
 
@@ -42,7 +42,7 @@ securityRouter.delete('/devices/:deviceId',
                 res.status(404).send("some error")
             }
         } catch (error) {
-            res.status(500).send(`controller security delete device by id error: ${(error as any).message}`)
+            res.status(400).send(`controller security delete device by id error: ${(error as any).message}`)
         }
     })
 

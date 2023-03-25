@@ -35,7 +35,7 @@ export class PostsController {
             const allPosts = await postsQueryRepo.getAllPosts(sortBy, sortDirection, pageNumber, pageSize)
             res.status(200).send(allPosts);
         } catch (error) {
-            res.status(500).send(`controller get all posts error: ${(error as any).message}`)
+            res.status(400).send(`controller get all posts error: ${(error as any).message}`)
         }
     }
 
@@ -48,7 +48,7 @@ export class PostsController {
                 res.sendStatus(404)
             }
         } catch (error) {
-            res.status(500).send(`controller get post by id error: ${(error as any).message}`)
+            res.status(400).send(`controller get post by id error: ${(error as any).message}`)
         }
     }
 
@@ -61,7 +61,7 @@ export class PostsController {
                 req.body.blogId)
             res.status(201).send(newPostResult)
         } catch (error) {
-            res.sendStatus(500)
+            res.sendStatus(400)
         }
     }
 
@@ -79,7 +79,7 @@ export class PostsController {
             const newComment = await commentsQueryRepo.getCommentById(newCommentId)
             res.status(201).send(newComment)
         } catch (error) {
-            res.status(500).send(`controller create comment by post id error: ${(error as any).message}`)
+            res.status(400).send(`controller create comment by post id error: ${(error as any).message}`)
         }
     }
 

@@ -34,7 +34,7 @@ export class BlogsController {
             const allBlogs = await blogsQueryRepo.getAllBlogs(searchNameTerm, sortBy, sortDirection, pageNumber, pageSize)
             res.status(200).send(allBlogs);
         } catch (error) {
-            res.status(500).send(error)
+            res.status(400).send(error)
         }
     }
 
@@ -47,7 +47,7 @@ export class BlogsController {
             const newBlog = await blogsQueryRepo.getBlogByID(newBlogsId)
             res.status(201).send(newBlog)
         } catch (error) {
-            res.status(500).send(`controller createBlog error: ${(error as any).message}`)
+            res.status(400).send(`controller createBlog error: ${(error as any).message}`)
         }
     }
 
@@ -65,7 +65,7 @@ export class BlogsController {
                 res.status(201).send(newPost)
             }
         } catch (error) {
-            res.status(500).send(`controller :blogId/post error: ${(error as any).message}`)
+            res.status(400).send(`controller :blogId/post error: ${(error as any).message}`)
         }
     }
 
@@ -78,7 +78,7 @@ export class BlogsController {
                 res.sendStatus(404)
             }
         } catch (error) {
-            res.status(500).send(`controller get blog by id error: ${(error as any).message}`)
+            res.status(400).send(`controller get blog by id error: ${(error as any).message}`)
         }
     }
 
@@ -98,7 +98,7 @@ export class BlogsController {
                     res.status(200).send(foundPosts)
                 }
             } catch (error) {
-                res.status(500).send(error)
+                res.status(400).send(error)
             }
         }
     }
@@ -112,7 +112,7 @@ export class BlogsController {
                 res.sendStatus(404);
             }
         } catch (error) {
-            res.status(500).send(`controller delete blog by id error: ${(error as any).message}`)
+            res.status(400).send(`controller delete blog by id error: ${(error as any).message}`)
         }
     }
 
@@ -129,7 +129,7 @@ export class BlogsController {
                 res.sendStatus(404)
             }
         } catch (error) {
-            res.status(500).send(`controller update blog by id error: ${(error as any).message}`)
+            res.status(400).send(`controller update blog by id error: ${(error as any).message}`)
         }
     }
 }

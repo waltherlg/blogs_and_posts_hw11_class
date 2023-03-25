@@ -55,6 +55,7 @@ export class UsersQueryRepo {
     }
 
     async getUserById(id: string): Promise<UserTypeOutput | null> {
+        if (!ObjectId.isValid(id)) return null
         const user = await UserModel.findOne({_id: new ObjectId(id)}).lean()
 
         if(!user) {
