@@ -64,7 +64,7 @@ export class CommentsController {
                 req.params.commentsId.toString(),
                 req.body.likeStatus)
             if (updateCommentLike) {
-                res.sendStatus(201)
+                res.sendStatus(204)
             } else res.status(400).send('not like')
         } catch (error) {
             res.status(500).send(`controller comment like status error: ${(error as any).message}`)
