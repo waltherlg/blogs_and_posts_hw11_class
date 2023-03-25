@@ -47,7 +47,7 @@ export class BlogsController {
             const newBlog = await blogsQueryRepo.getBlogByID(newBlogsId)
             res.status(201).send(newBlog)
         } catch (error) {
-            res.status(500).send(error)
+            res.status(500).send(`controller createBlog error: ${(error as any).message}`)
         }
     }
 
