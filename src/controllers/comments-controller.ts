@@ -71,9 +71,11 @@ export class CommentsController {
             console.log('updateCommentLike ',updateCommentLike)
             if (updateCommentLike) {
                 res.sendStatus(204)
-            } else res.status(400).send('not like')
+            } else {
+                res.status(400).send('not like')
+            }
         } catch (error) {
-            res.status(400).send(`controller comment like status error: ${(error as any).message}`)
+            res.status(405).send(`controller comment like status error: ${(error as any).message}`)
         }
     }
 }
