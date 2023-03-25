@@ -98,7 +98,7 @@ export class UsersRepository {
         }
         let _id = new ObjectId(userId)
         let user = await UserModel.findById({_id})
-        if(!user) return null
+        if(!user) return false
         const newLikedComment = {commentsId, createdAt, status, }
         user.likedComments.push(newLikedComment)
         await user.save();
