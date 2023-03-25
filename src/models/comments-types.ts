@@ -29,7 +29,7 @@ export type CommentTypeOutput = {
     content: string
     commentatorInfo: CommentatorInfoType
     createdAt:	string
-    LikesInfo: LikesInfoType
+    likesInfo: LikesInfoType
 }
 
 // export type CommentDBType = {

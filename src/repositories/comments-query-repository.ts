@@ -53,7 +53,7 @@ export class CommentsQueryRepo {
                     userLogin: comments.userLogin,
                 },
                 createdAt: comments.createdAt,
-                LikesInfo: {
+                likesInfo: {
                     likesCount: comments.likesCount,
                     dislikesCount: comments.dislikesCount,
                     myStatus: myStatus
@@ -103,7 +103,7 @@ export class CommentsQueryRepo {
                 userLogin: comment.userLogin,
             },
             createdAt: comment.createdAt,
-            LikesInfo: {
+            likesInfo: {
                 likesCount: comment.likesCount,
                 dislikesCount: comment.dislikesCount,
                 myStatus: myStatus
