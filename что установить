@@ -57,3 +57,5 @@ yarn add mongoose
 
 yarn add jest ts-jest @types/jest supertest @types/supertest -D
 yarn ts-jest config:init
+
+yarn add inversify@5.0.5 reflect-metadata
