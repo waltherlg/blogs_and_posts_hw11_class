@@ -13,8 +13,11 @@ import {
 } from "../middlewares/input-validation-middleware/input-validation-middleware";
 import {authRateLimiter} from "../middlewares/auth-rate-limiter";
 import {isEmailExistValidation} from "../middlewares/other-midlevares";
-import {authControllerInstance} from "../compositions-root";
+import {container} from "../compositions-root";
+import {AuthController} from "../controllers/auth-controller";
+// import {authControllerInstance} from "../compositions-root";
 
+const authControllerInstance = container.resolve(AuthController)
 export const authRouter = Router({})
 
 authRouter.post('/registration',

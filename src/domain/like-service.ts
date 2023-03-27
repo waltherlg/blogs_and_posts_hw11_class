@@ -2,13 +2,14 @@ import {usersQueryRepo} from "../repositories/users-query-repository";
 import {UsersRepository} from "../repositories/users-repository";
 import {CommentsRepository} from "../repositories/comments-repository";
 import {th} from "date-fns/locale";
+import {injectable} from "inversify";
 
-
+@injectable()
 export class LikeService {
     constructor(protected commentsRepository: CommentsRepository, protected usersRepository: UsersRepository) {
     }
 
-    async updateCommentLike(userId: string, commentsId: string, status: string){
+    async updateCommentLike(userId: string, commentsId: string, status: string): Promise<boolean>{
         const isUserAlreadyLikeComment = this.usersRepository.isUserAlreadyLikeComment(userId, commentsId)
         if (!isUserAlreadyLikeComment){
             const createdAt = new Date()

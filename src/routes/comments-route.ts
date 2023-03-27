@@ -6,8 +6,11 @@ import {
     inputValidationMiddleware,
     likeStatusValidation
 } from "../middlewares/input-validation-middleware/input-validation-middleware";
-import {commentsControllerInstance} from "../compositions-root";
+import {container} from "../compositions-root";
+import {CommentsController} from "../controllers/comments-controller";
+// import {commentsControllerInstance} from "../compositions-root";
 
+const commentsControllerInstance = container.resolve(CommentsController)
 export const commentsRouter = Router({})
 console.log('commentsControllerInstance', commentsControllerInstance)
 

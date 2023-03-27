@@ -6,7 +6,8 @@ import {CommentsLikeType} from "../models/users-types";
 import {CommentModel, UserModel} from "../schemes/schemes";
 import {ObjectId} from "mongodb";
 import {UserDBType} from "../models/users-types";
-
+import {injectable} from "inversify";
+@injectable()
 export class CommentsQueryRepo {
 
     async getAllCommentsByPostId(

@@ -1,3 +1,5 @@
+import "reflect-metadata"
+import {Container} from "inversify";
 import {CommentsRepository} from "./repositories/comments-repository";
 import {CommentsService} from "./domain/comment-service";
 import {PostsRepository} from "./repositories/posts-repository";
@@ -14,28 +16,59 @@ import {AuthController} from "./controllers/auth-controller";
 import {BlogsController} from "./controllers/blogs-controller";
 import {PostsController} from "./controllers/posts-controller";
 import {UsersController} from "./controllers/users-controller";
+import {BlogsQueryRepo} from "./repositories/blog-query-repository";
+import {PostsQueryRepo} from "./repositories/post-query-repository";
+import {UsersQueryRepo} from "./repositories/users-query-repository";
 
-const commentsQueryRepo = new CommentsQueryRepo()
 
-const blogsRepository = new BlogsRepository()
-const blogsService = new BlogsService(blogsRepository)
+export const container = new Container()
 
-const postsRepository = new PostsRepository()
-const postsService = new PostsService(postsRepository)
+container.bind(AuthController).to(AuthController)
+container.bind(BlogsController).to(BlogsController)
+container.bind(CommentsController).to(CommentsController)
+container.bind(PostsController).to(PostsController)
+container.bind(UsersController).to(UsersController)
 
-const commentsRepository = new CommentsRepository()
-const commentsService = new CommentsService(commentsRepository)
+container.bind(AuthService).to(AuthService)
+container.bind(BlogsService).to(BlogsService)
+container.bind(CommentsService).to(CommentsService)
+container.bind(LikeService).to(LikeService)
+container.bind(PostsService).to(PostsService)
+container.bind(UsersService).to(UsersService)
 
-export const usersRepository = new UsersRepository()
-const usersService = new UsersService(usersRepository)
+container.bind(BlogsQueryRepo).to(BlogsQueryRepo)
+container.bind(BlogsRepository).to(BlogsRepository)
+container.bind(CommentsQueryRepo).to(CommentsQueryRepo)
+container.bind(CommentsRepository).to(CommentsRepository)
+container.bind(PostsQueryRepo).to(PostsQueryRepo)
+container.bind(PostsRepository).to(PostsRepository)
+container.bind(UsersQueryRepo).to(UsersQueryRepo)
+container.bind(UsersRepository).to(UsersRepository)
 
-const likeService = new LikeService(commentsRepository, usersRepository)
 
-const authService = new AuthService(usersRepository)
-
-export const blogsControllerInstance = new BlogsController(blogsService, postsService)
-export const commentsControllerInstance = new CommentsController(commentsService, likeService, commentsQueryRepo)
-export const postsControllerInstance = new PostsController(postsService, commentsService)
-export const usersControllerInstance = new UsersController(usersService)
-export const authControllerInstance = new AuthController(authService, usersService)
+export const checkUsersRepo = new UsersRepository()
+//
+// const commentsQueryRepo = new CommentsQueryRepo()
+//
+// const blogsRepository = new BlogsRepository()
+// const blogsService = new BlogsService(blogsRepository)
+//
+// const postsRepository = new PostsRepository()
+// const postsService = new PostsService(postsRepository)
+//
+// const commentsRepository = new CommentsRepository()
+// const commentsService = new CommentsService(commentsRepository)
+//
+// const usersRepository = new UsersRepository()
+// const usersService = new UsersService(usersRepository)
+//
+// const likeService = new LikeService(commentsRepository, usersRepository)
+//
+// const authService = new AuthService(usersRepository)
+//
+// export const blogsControllerInstance = new BlogsController(blogsService, postsService)
+// export const commentsControllerInstance = new CommentsController(commentsService, likeService, commentsQueryRepo)
+// export const postsControllerInstance = new PostsController(postsService, commentsService)
+// export const usersControllerInstance = new UsersController(usersService)
+// export const authControllerInstance = new AuthController(authService, usersService)
 

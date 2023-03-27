@@ -4,7 +4,8 @@ import {RequestWithBody} from "../models/types";
 import {UserAuthModel, UserInputModel} from "../models/users-models";
 import {Request, Response} from "express";
 import {usersQueryRepo} from "../repositories/users-query-repository";
-
+import {injectable} from "inversify";
+@injectable()
 export class AuthController {
     constructor(protected authService: AuthService, protected usersService: UsersService) {
     }

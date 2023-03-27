@@ -4,7 +4,8 @@ import {UserInputModel, UserParamURIModel} from "../models/users-models";
 import {Response} from "express";
 import {usersQueryRepo} from "../repositories/users-query-repository";
 import {RequestUsersQueryModel} from "../models/models";
-
+import {injectable} from "inversify";
+@injectable()
 export class UsersController {
     constructor(protected usersService: UsersService) {
     }

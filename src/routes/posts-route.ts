@@ -1,5 +1,5 @@
 import {Router} from "express";
-import {postsControllerInstance} from "../compositions-root";
+//import {postsControllerInstance} from "../compositions-root";
 import {
     commentContentValidation,
     contentValidation,
@@ -9,7 +9,10 @@ import {
     titleValidation
 } from "../middlewares/input-validation-middleware/input-validation-middleware";
 import {authMiddleware, basicAuthMiddleware, optionalAuthMiddleware} from "../middlewares/basic-auth.middleware";
+import {container} from "../compositions-root";
+import {PostsController} from "../controllers/posts-controller";
 
+const postsControllerInstance = container.resolve(PostsController)
 export const postsRouter = Router({})
 
 postsRouter.get('/',

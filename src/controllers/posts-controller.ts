@@ -21,7 +21,8 @@ import {Response} from "express";
 import {postsQueryRepo} from "../repositories/post-query-repository";
 import {PostTypeOutput} from "../models/posts-types";
 import {commentsQueryRepo} from "../repositories/comments-query-repository";
-
+import {injectable} from "inversify";
+@injectable()
 export class PostsController {
     constructor(protected postsService: PostsService, protected commentService: CommentsService) {
     }

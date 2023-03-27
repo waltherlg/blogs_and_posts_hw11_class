@@ -9,6 +9,7 @@ import {deviceService} from "./device-service";
 import {userDeviceRepo} from "../repositories/users-device-repository";
 import {cryptoAdapter} from "../adapters/crypto-adapter";
 import {UsersRepository} from "../repositories/users-repository";
+import {injectable} from "inversify";
 
 
 const obj  = [{}]
@@ -17,10 +18,7 @@ const obj  = [{}]
 
     }
  }
-
-const arr = new nyArr()
-
-arr.myArrayMethod()
+@injectable()
 export class AuthService {
     constructor(protected usersRepository: UsersRepository) {
     }

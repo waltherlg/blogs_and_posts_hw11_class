@@ -4,6 +4,7 @@ import {UserModel} from "../schemes/schemes";
 import {ObjectId} from "mongodb";
 import {tr} from "date-fns/locale";
 import {HydratedDocument} from "mongoose";
+import {injectable} from "inversify";
 
 function sort(sortDirection: string) {
     return (sortDirection === 'desc') ? -1 : 1;
@@ -12,7 +13,7 @@ function sort(sortDirection: string) {
 function skipped(pageNumber: string, pageSize: string): number {
     return (+pageNumber - 1) * (+pageSize);
 }
-
+@injectable()
 export class UsersQueryRepo {
 
     async getAllUsers(

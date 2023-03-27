@@ -1,5 +1,5 @@
 import {Router} from "express";
-import {blogsControllerInstance} from "../compositions-root";
+// import {blogsControllerInstance} from "../compositions-root";
 import {
     contentValidation,
     descriptionValidation,
@@ -10,7 +10,10 @@ import {
     websiteUrlValidation
 } from "../middlewares/input-validation-middleware/input-validation-middleware";
 import {basicAuthMiddleware} from "../middlewares/basic-auth.middleware";
+import {container} from "../compositions-root";
+import {BlogsController} from "../controllers/blogs-controller";
 
+const blogsControllerInstance = container.resolve(BlogsController)
 export const blogsRouter = Router({})
 
 blogsRouter.get('/',

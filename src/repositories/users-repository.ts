@@ -3,9 +3,10 @@ import {UserDBType, UserTypeOutput} from "../models/users-types";
 import {PasswordRecoveryModel} from "../models/users-models";
 import {UserModel} from "../schemes/schemes";
 import {HydratedDocument} from "mongoose";
+import {injectable} from "inversify";
 
 //export const UserModel = client.db("blogsAndPosts").collection<userType>("users")
-
+@injectable()
 export class UsersRepository {
     async save(user: HydratedDocument<UserDBType>){
         await user.save()
@@ -97,12 +98,15 @@ export class UsersRepository {
             return false
         }
         let _id = new ObjectId(userId)
-        let user = await UserModel.findById({_id})
-        if(!user) return false
-        const newLikedComment = {commentsId, createdAt, status, }
+        let user = await UserModel.findOne({_id: _id})
+        if(!user) {
+            return false
+        }
+        const newLikedComment = {commentsId, createdAt, status}
         user.likedComments.push(newLikedComment)
-        await user.save();
-        return true
+        console.log('updated user ', user)
+        const result = await user.save();
+        return result ? true : false
     }
 
     async updateCommentsLikeObject(userId: string, commentsId: string, status: string){

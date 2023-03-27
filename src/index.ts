@@ -1,5 +1,5 @@
 
-
+require('reflect-metadata')
 import express from 'express'
 import {blogsRouter} from "./routes/blogs-route";
 import {postsRouter} from "./routes/posts-route";

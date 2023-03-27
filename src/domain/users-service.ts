@@ -3,8 +3,9 @@ import {UserDBType, UserTypeOutput} from "../models/users-types";
 import {UsersRepository} from "../repositories/users-repository";
 import {usersQueryRepo} from "../repositories/users-query-repository";
 import {cryptoAdapter} from "../adapters/crypto-adapter";
+import {injectable} from "inversify";
 
-
+@injectable()
 export class UsersService {
     constructor(protected usersRepository: UsersRepository) {
     }

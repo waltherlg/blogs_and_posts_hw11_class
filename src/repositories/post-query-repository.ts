@@ -5,7 +5,8 @@ import {sort} from "../application/functions";
 import {skipped} from "../application/functions";
 import {PostModel} from "../schemes/schemes";
 import {ObjectId} from "mongodb";
-
+import {injectable} from "inversify";
+@injectable()
 export class PostsQueryRepo {
 
     async getAllPosts(

@@ -2,7 +2,8 @@ import {PostsRepository, postsRepository} from "../repositories/posts-repository
 import {ObjectId} from "mongodb";
 import {PostDBType, PostTypeOutput} from "../models/posts-types";
 import {blogsQueryRepo} from "../repositories/blog-query-repository";
-
+import {injectable} from "inversify";
+@injectable()
 export class PostsService {
     constructor(protected postsRepository: PostsRepository) {
     }

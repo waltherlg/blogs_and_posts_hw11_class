@@ -6,8 +6,11 @@ import {
     loginValidation,
     passwordValidation
 } from "../middlewares/input-validation-middleware/input-validation-middleware";
-import {usersControllerInstance} from "../compositions-root";
+import {container} from "../compositions-root";
+import {UsersController} from "../controllers/users-controller";
+//import {usersControllerInstance} from "../compositions-root";
 
+const usersControllerInstance = container.resolve(UsersController)
 export const usersRouter = Router({})
 
 usersRouter.post('/',

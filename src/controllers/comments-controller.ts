@@ -4,7 +4,8 @@ import {commentsQueryRepo, CommentsQueryRepo} from "../repositories/comments-que
 import {Request, Response} from "express";
 import {jwtService} from "../application/jwt-service";
 import {log} from "util";
-
+import {injectable} from "inversify";
+@injectable()
 export class CommentsController {
     constructor(protected commentsService: CommentsService, protected likeService: LikeService, protected commentsQueryRepo: CommentsQueryRepo) {
     }

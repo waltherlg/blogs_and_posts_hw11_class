@@ -19,7 +19,8 @@ import {
 import {Response} from "express";
 import {blogsQueryRepo} from "../repositories/blog-query-repository";
 import {postsQueryRepo} from "../repositories/post-query-repository";
-
+import {injectable} from "inversify";
+@injectable()
 export class BlogsController {
     constructor(protected blogsService: BlogsService, protected postsService: PostsService) {
     }

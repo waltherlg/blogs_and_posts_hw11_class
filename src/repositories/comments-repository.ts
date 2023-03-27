@@ -2,8 +2,9 @@
 import {ObjectId} from "mongodb";
 import {CommentDBType} from "../models/comments-types";
 import {CommentModel} from "../schemes/schemes";
+import {injectable} from "inversify";
 
-
+@injectable()
 export class CommentsRepository{
 
     async createComment(newComment: CommentDBType): Promise<string> {
@@ -68,8 +69,8 @@ export class CommentsRepository{
         let comment = await CommentModel.findOne({_id: _id})
         if (!comment) return false
         comment.likesCount -= 1
-        await comment.save()
-        return true
+        const result = await comment.save()
+        return result ? true : false
     }
 
     async increaseCommentsDislikes(commentsId: string){

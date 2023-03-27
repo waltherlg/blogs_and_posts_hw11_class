@@ -4,6 +4,7 @@ import {ObjectId} from "mongodb";
 import {BlogDBType, BlogTypeOutput} from "../models/blogs-types";
 import {PaginationOutputModel, RequestBlogsQueryModel} from "../models/models";
 import {BlogModelClass} from "../schemes/schemes";
+import {injectable} from "inversify";
 
 function sort(sortDirection: string){
     return (sortDirection === 'desc') ? -1 : 1;
@@ -13,7 +14,7 @@ function skipped(pageNumber: string, pageSize: string): number {
     return (+pageNumber - 1) * (+pageSize);
 }
 
-
+@injectable()
 export class BlogsQueryRepo {
 
     async getAllBlogs(
