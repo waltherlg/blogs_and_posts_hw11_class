@@ -1,10 +1,10 @@
 import {CommentsService} from "../domain/comment-service";
 import {LikeService} from "../domain/like-service";
-import {commentsQueryRepo, CommentsQueryRepo} from "../repositories/comments-query-repository";
+import {CommentsQueryRepo} from "../repositories/comments-query-repository";
 import {Request, Response} from "express";
 import {jwtService} from "../application/jwt-service";
-import {log} from "util";
 import {injectable} from "inversify";
+
 @injectable()
 export class CommentsController {
     constructor(protected commentsService: CommentsService, protected likeService: LikeService, protected commentsQueryRepo: CommentsQueryRepo) {
@@ -55,7 +55,7 @@ export class CommentsController {
 
     async setLikeStatusForComment(req: Request, res: Response) {
         try {
-            const isCommentExist = await commentsQueryRepo.getCommentById(req.params.commentsId.toString())
+            const isCommentExist = await this.commentsQueryRepo.getCommentById(req.params.commentsId.toString())
             console.log('isCommentExist ', isCommentExist)
             if (!isCommentExist) {
                 res.sendStatus(404)
@@ -69,14 +69,14 @@ export class CommentsController {
                 userId,
                 req.params.commentsId.toString(),
                 req.body.likeStatus)
-            console.log('updateCommentLike ',updateCommentLike)
+            console.log('updateCommentLike ', updateCommentLike)
             if (updateCommentLike) {
-                res.sendStatus(204)
+                return res.sendStatus(204)
             } else {
-                res.status(400).send('not like')
+                return res.status(400).send('not like')
             }
         } catch (error) {
-            res.status(405).send(`controller comment like status error: ${(error as any).message}`)
+            return res.status(405).send(`controller comment like status error: ${(error as any).message}`)
         }
     }
 }

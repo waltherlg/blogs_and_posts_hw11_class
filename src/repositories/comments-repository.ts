@@ -40,10 +40,10 @@ export class CommentsRepository{
         let comment = await CommentModel.findOne({_id: _id})
         if (!comment) return false
         if (status === 'Like') {
-            comment.likesCount += 1
+            comment.likesCount++
         }
         if (status === 'Dislike') {
-            comment.dislikesCount =+ 1
+            comment.dislikesCount++
         }
         await comment.save()
         return true
