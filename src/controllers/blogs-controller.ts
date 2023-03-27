@@ -43,15 +43,21 @@ export class BlogsController {
 
     async createBlog(req: RequestWithBody<CreateBlogModel>, res: Response) {
         try {
+            console.log('blogs controller => createBlog => start')
             const newBlogsId = await this.blogsService.createBlog(
                 req.body.name,
                 req.body.description,
                 req.body.websiteUrl)
+            console.log('blogs controller => createBlog => newBlogsId', newBlogsId)
             const newBlog = await this.blogsQueryRepo.getBlogByID(newBlogsId)
+            console.log('blogs controller => createBlog => newBlog', newBlog)
             res.status(201).send(newBlog)
+            console.log('send ok')
+            return
         } catch (error) {
-            console.log(error)
+            console.log('in catch, error: ', error)
             res.status(400).send(`controller createBlog error: ${(error as any).message}`)
+            return
         }
     }
 
