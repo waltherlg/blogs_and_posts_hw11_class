@@ -2,12 +2,12 @@ import {UsersService} from "../domain/users-service";
 import {RequestWithBody, RequestWithParams, RequestWithQuery} from "../models/types";
 import {UserInputModel, UserParamURIModel} from "../models/users-models";
 import {Response} from "express";
-import {usersQueryRepo} from "../repositories/users-query-repository";
+import {UsersQueryRepo} from "../repositories/users-query-repository";
 import {RequestUsersQueryModel} from "../models/models";
 import {injectable} from "inversify";
 @injectable()
 export class UsersController {
-    constructor(protected usersService: UsersService) {
+    constructor(protected usersService: UsersService, protected usersQueryRepo: UsersQueryRepo) {
     }
 
     async createUser(req: RequestWithBody<UserInputModel>, res: Response) {
@@ -16,7 +16,7 @@ export class UsersController {
                 req.body.login,
                 req.body.password,
                 req.body.email)
-            const newUser = await usersQueryRepo.getUserById(newUserId)
+            const newUser = await this.usersQueryRepo.getUserById(newUserId)
             if (!newUser) {
                 res.status(400).send('cant return created user')
             }
@@ -47,7 +47,7 @@ export class UsersController {
             let pageSize = req.query.pageSize ? req.query.pageSize : '10'
             let searchLoginTerm = req.query.searchLoginTerm ? req.query.searchLoginTerm : ''
             let searchEmailTerm = req.query.searchEmailTerm ? req.query.searchEmailTerm : ''
-            const allUsers = await usersQueryRepo.getAllUsers(sortBy, sortDirection, pageNumber, pageSize, searchLoginTerm, searchEmailTerm)
+            const allUsers = await this.usersQueryRepo.getAllUsers(sortBy, sortDirection, pageNumber, pageSize, searchLoginTerm, searchEmailTerm)
             res.status(200).send(allUsers)
         } catch (error) {
             res.status(400).send(`controller get users error: ${(error as any).message}`)

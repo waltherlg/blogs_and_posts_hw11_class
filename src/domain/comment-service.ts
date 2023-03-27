@@ -1,14 +1,14 @@
 import {ObjectId} from "mongodb";
 import {CommentDBType, CommentTypeOutput} from "../models/comments-types";
 import {CommentsRepository} from "../repositories/comments-repository";
-import {UsersQueryRepo, usersQueryRepo} from "../repositories/users-query-repository";
+import {UsersQueryRepo} from "../repositories/users-query-repository";
 import {injectable} from "inversify";
 
 @injectable()
 export class CommentsService {
-    constructor(protected commentsRepository: CommentsRepository) {}
+    constructor(protected commentsRepository: CommentsRepository, protected usersQueryRepo: UsersQueryRepo) {}
     async createComment(postId: string, content: string, userId: string,): Promise<string> {
-        const user = await usersQueryRepo.getUserById(userId)
+        const user = await this.usersQueryRepo.getUserById(userId)
         const newComment = new CommentDBType(
             new ObjectId(),
             "post",

@@ -3,11 +3,11 @@ import {UsersService} from "../domain/users-service";
 import {RequestWithBody} from "../models/types";
 import {UserAuthModel, UserInputModel} from "../models/users-models";
 import {Request, Response} from "express";
-import {usersQueryRepo} from "../repositories/users-query-repository";
 import {injectable} from "inversify";
+import {UsersQueryRepo} from "../repositories/users-query-repository";
 @injectable()
 export class AuthController {
-    constructor(protected authService: AuthService, protected usersService: UsersService) {
+    constructor(protected authService: AuthService, protected usersService: UsersService, protected usersQueryRepo: UsersQueryRepo) {
     }
 
     async registration(req: RequestWithBody<UserInputModel>, res: Response) {
@@ -17,7 +17,7 @@ export class AuthController {
                 req.body.password,
                 req.body.email)
             if (newUserId) {
-                const user = await usersQueryRepo.getUserById(newUserId)
+                const user = await this.usersQueryRepo.getUserById(newUserId)
                 res.status(204).send(user)
             } else {
                 res.sendStatus(400)

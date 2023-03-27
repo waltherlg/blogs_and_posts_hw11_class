@@ -1,13 +1,13 @@
 import {ObjectId} from "mongodb";
 import {UserDBType, UserTypeOutput} from "../models/users-types";
 import {UsersRepository} from "../repositories/users-repository";
-import {usersQueryRepo} from "../repositories/users-query-repository";
+import {UsersQueryRepo,} from "../repositories/users-query-repository";
 import {cryptoAdapter} from "../adapters/crypto-adapter";
 import {injectable} from "inversify";
 
 @injectable()
 export class UsersService {
-    constructor(protected usersRepository: UsersRepository) {
+    constructor(protected usersRepository: UsersRepository, protected usersQueryRepo: UsersQueryRepo) {
     }
     async createUser(login: string, password: string, email: string): Promise<string> {
 
@@ -32,7 +32,7 @@ export class UsersService {
     }
 
     async currentUserInfo(userId: string){
-        const user = await usersQueryRepo.getUserById(userId)
+        const user = await this.usersQueryRepo.getUserById(userId)
         if (!user) {
             return null
         }

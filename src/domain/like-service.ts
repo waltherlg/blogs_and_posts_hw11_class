@@ -1,4 +1,4 @@
-import {usersQueryRepo} from "../repositories/users-query-repository";
+import {UsersQueryRepo} from "../repositories/users-query-repository";
 import {UsersRepository} from "../repositories/users-repository";
 import {CommentsRepository} from "../repositories/comments-repository";
 import {th} from "date-fns/locale";
@@ -6,7 +6,7 @@ import {injectable} from "inversify";
 
 @injectable()
 export class LikeService {
-    constructor(protected commentsRepository: CommentsRepository, protected usersRepository: UsersRepository) {
+    constructor(protected commentsRepository: CommentsRepository, protected usersRepository: UsersRepository, protected usersQueryRepo: UsersQueryRepo) {
     }
 
     async updateCommentLike(userId: string, commentsId: string, status: string): Promise<boolean>{
@@ -18,7 +18,7 @@ export class LikeService {
             const setCount = await this.commentsRepository.setCountCommentsLike(commentsId, status)
             return isLikeAdded
         }
-        const likedComments = await usersQueryRepo.getUsersLikedComments(userId)
+        const likedComments = await this.usersQueryRepo.getUsersLikedComments(userId)
         if (!likedComments) return false
         const comment = likedComments.find(c => c.commentsId === commentsId)
         const currentStatus = comment ? comment.status : null
