@@ -2,7 +2,7 @@
 
 import {ObjectId} from "mongodb";
 import {BlogDBType, BlogTypeOutput} from "../models/blogs-types";
-import {PaginationOutputModel, RequestBlogsQueryModel} from "../models/models";
+import {PaginationOutputModel} from "../models/models";
 import {BlogModelClass} from "../schemes/schemes";
 import {injectable} from "inversify";
 
@@ -85,4 +85,4 @@ export class BlogsQueryRepo {
     }
 }
 
-export const blogsQueryRepo = new BlogsQueryRepo()
+// export const blogsQueryRepo = new BlogsQueryRepo()

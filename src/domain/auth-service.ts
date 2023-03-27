@@ -11,13 +11,6 @@ import {cryptoAdapter} from "../adapters/crypto-adapter";
 import {UsersRepository} from "../repositories/users-repository";
 import {injectable} from "inversify";
 
-
-const obj  = [{}]
- class nyArr {
-    myArrayMethod() {
-
-    }
- }
 @injectable()
 export class AuthService {
     constructor(protected usersRepository: UsersRepository) {

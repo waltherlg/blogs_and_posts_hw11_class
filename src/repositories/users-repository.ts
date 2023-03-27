@@ -106,7 +106,7 @@ export class UsersRepository {
         user.likedComments.push(newLikedComment)
         console.log('updated user ', user)
         const result = await user.save();
-        return result ? true : false
+        return !!result
     }
 
     async updateCommentsLikeObject(userId: string, commentsId: string, status: string){

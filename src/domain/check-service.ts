@@ -1,6 +1,6 @@
 import {usersQueryRepo} from "../repositories/users-query-repository";
-import {checkUsersRepo} from "../compositions-root";
-
+import {checkUsersRepo, container} from "../compositions-root";
+import {BlogsQueryRepo} from "../repositories/blog-query-repository";
 
 export const checkService = {
     async isUserExist(userId: string): Promise<boolean> {

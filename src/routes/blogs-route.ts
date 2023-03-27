@@ -27,31 +27,31 @@ blogsRouter.post('/',
     inputValidationMiddleware,
     blogsControllerInstance.createBlog.bind(blogsControllerInstance))
 
-blogsRouter.post('/:blogId/posts',
-    basicAuthMiddleware,
-    titleValidation,
-    shortDescriptionValidation,
-    contentValidation,
-    inputValidationMiddleware,
-    blogsControllerInstance.createPostByBlogsId.bind(blogsControllerInstance))
-
-blogsRouter.get('/:id',
-    blogsControllerInstance.getBlogById.bind(blogsControllerInstance))
-
-blogsRouter.get('/:id/posts',
-    blogsControllerInstance.getAllPostsByBlogsId.bind(blogsControllerInstance))
-
-blogsRouter.delete('/:id',
-    basicAuthMiddleware,
-    blogsControllerInstance.deleteBlogById.bind(blogsControllerInstance))
-
-blogsRouter.put('/:id',
-    basicAuthMiddleware,
-    nameValidation,
-    descriptionValidation,
-    websiteUrlValidation,
-    inputValidationMiddleware,
-    blogsControllerInstance.updateBlogById.bind(blogsControllerInstance))
+// blogsRouter.post('/:blogId/posts',
+//     basicAuthMiddleware,
+//     titleValidation,
+//     shortDescriptionValidation,
+//     contentValidation,
+//     inputValidationMiddleware,
+//     blogsControllerInstance.createPostByBlogsId.bind(blogsControllerInstance))
+//
+// blogsRouter.get('/:id',
+//     blogsControllerInstance.getBlogById.bind(blogsControllerInstance))
+//
+// blogsRouter.get('/:id/posts',
+//     blogsControllerInstance.getAllPostsByBlogsId.bind(blogsControllerInstance))
+//
+// blogsRouter.delete('/:id',
+//     basicAuthMiddleware,
+//     blogsControllerInstance.deleteBlogById.bind(blogsControllerInstance))
+//
+// blogsRouter.put('/:id',
+//     basicAuthMiddleware,
+//     nameValidation,
+//     descriptionValidation,
+//     websiteUrlValidation,
+//     inputValidationMiddleware,
+//     blogsControllerInstance.updateBlogById.bind(blogsControllerInstance))
 
 
 

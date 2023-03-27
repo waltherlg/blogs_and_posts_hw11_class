@@ -19,7 +19,7 @@ export const basicAuthMiddleware = (req: Request, res: Response, next: NextFunct
     if (!(user == 'admin' && pass == 'qwerty')) {
         return res.status(401).send("Unauthorized")
     }
-    return next()
+    next()
 }
 
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {

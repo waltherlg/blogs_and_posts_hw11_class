@@ -1,10 +1,11 @@
 
 import {NextFunction, Request, Response} from "express";
 import {body, validationResult} from "express-validator";
-import {blogsQueryRepo} from "../../repositories/blog-query-repository";
 import {checkService} from "../../domain/check-service";
+import {container} from "../../compositions-root";
+import {BlogsQueryRepo} from "../../repositories/blog-query-repository";
 
-
+const blogsQueryRepo = container.resolve(BlogsQueryRepo)
 
 export const inputValidationMiddleware = (req: Request, res: Response, next: NextFunction) => {
 

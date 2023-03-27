@@ -23,11 +23,16 @@ import {UsersQueryRepo} from "./repositories/users-query-repository";
 
 export const container = new Container()
 
-container.bind(AuthController).to(AuthController)
-container.bind(BlogsController).to(BlogsController)
-container.bind(CommentsController).to(CommentsController)
-container.bind(PostsController).to(PostsController)
-container.bind(UsersController).to(UsersController)
+
+
+container.bind(BlogsQueryRepo).toSelf()
+container.bind(BlogsRepository).to(BlogsRepository)
+container.bind(CommentsQueryRepo).to(CommentsQueryRepo)
+container.bind(CommentsRepository).to(CommentsRepository)
+container.bind(PostsQueryRepo).to(PostsQueryRepo)
+container.bind(PostsRepository).to(PostsRepository)
+container.bind(UsersQueryRepo).to(UsersQueryRepo)
+container.bind(UsersRepository).to(UsersRepository)
 
 container.bind(AuthService).to(AuthService)
 container.bind(BlogsService).to(BlogsService)
@@ -36,14 +41,11 @@ container.bind(LikeService).to(LikeService)
 container.bind(PostsService).to(PostsService)
 container.bind(UsersService).to(UsersService)
 
-container.bind(BlogsQueryRepo).to(BlogsQueryRepo)
-container.bind(BlogsRepository).to(BlogsRepository)
-container.bind(CommentsQueryRepo).to(CommentsQueryRepo)
-container.bind(CommentsRepository).to(CommentsRepository)
-container.bind(PostsQueryRepo).to(PostsQueryRepo)
-container.bind(PostsRepository).to(PostsRepository)
-container.bind(UsersQueryRepo).to(UsersQueryRepo)
-container.bind(UsersRepository).to(UsersRepository)
+container.bind(AuthController).to(AuthController)
+container.bind(BlogsController).to(BlogsController)
+container.bind(CommentsController).to(CommentsController)
+container.bind(PostsController).to(PostsController)
+container.bind(UsersController).to(UsersController)
 
 
 export const checkUsersRepo = new UsersRepository()

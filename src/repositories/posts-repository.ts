@@ -54,7 +54,6 @@ export class PostsRepository {
     }
 }
 
-export const postsRepository = new PostsRepository()
 
 // export const postsRepository = {
 //

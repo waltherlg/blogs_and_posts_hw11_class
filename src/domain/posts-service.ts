@@ -1,18 +1,18 @@
-import {PostsRepository, postsRepository} from "../repositories/posts-repository";
+import {PostsRepository, } from "../repositories/posts-repository";
 import {ObjectId} from "mongodb";
 import {PostDBType, PostTypeOutput} from "../models/posts-types";
-import {blogsQueryRepo} from "../repositories/blog-query-repository";
 import {injectable} from "inversify";
+import {BlogsQueryRepo} from "../repositories/blog-query-repository";
 @injectable()
 export class PostsService {
-    constructor(protected postsRepository: PostsRepository) {
+    constructor(protected postsRepository: PostsRepository,  protected blogsQueryRepo: BlogsQueryRepo ) {
     }
     async createPost(
         title: string,
         shortDescription: string,
         content: string,
         blogId: string): Promise<PostTypeOutput> {
-        let foundBlog = await blogsQueryRepo.getBlogByID(blogId)
+        let foundBlog = await this.blogsQueryRepo.getBlogByID(blogId)
         const blogName = foundBlog!.name
         const newPost = new PostDBType(
             new ObjectId(),
@@ -32,7 +32,7 @@ export class PostsService {
         content: string,
         blogId: string): Promise<PostTypeOutput> {
         //blogService
-        let foundBlog = await blogsQueryRepo.getBlogByID(blogId)
+        let foundBlog = await this.blogsQueryRepo.getBlogByID(blogId)
         const blogName =  foundBlog!.name
         const newPost: PostDBType = {
             "_id": new ObjectId(),
@@ -53,15 +53,15 @@ export class PostsService {
         shortDescription: string,
         content: string,
         blogId: string): Promise<boolean> {
-        return await postsRepository.updatePost(id, title, shortDescription, content, blogId)
+        return await this.postsRepository.updatePost(id, title, shortDescription, content, blogId)
     }
 
     async deletePost(id: string): Promise<boolean> {
-        return await postsRepository.deletePost(id)
+        return await this.postsRepository.deletePost(id)
     }
 
     async deleteAllPosts(): Promise<boolean> {
-        return await postsRepository.deleteAllPosts()
+        return await this.postsRepository.deleteAllPosts()
     }
 }
 

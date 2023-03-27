@@ -25,8 +25,4 @@ export class BlogsService {
     async deleteBlog(id: string): Promise<boolean>{
         return await this.blogsRepository.deleteBlog(id)
     }
-
-    async deleteAllBlogs(): Promise<boolean> {
-        return  await this.blogsRepository.deleteAllBlogs()
-    }
 }
