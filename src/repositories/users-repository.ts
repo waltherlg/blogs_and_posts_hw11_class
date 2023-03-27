@@ -93,7 +93,7 @@ export class UsersRepository {
         return result.modifiedCount === 1
     }
 
-    async createCommentsLikeObject(userId: string, commentsId: string, createdAt: Date, status: string){
+    async createCommentsLikeObject(userId: string, commentsId: string, createdAt: Date, status: string): Promise<boolean>{
         if (!ObjectId.isValid(userId)){
             return false
         }

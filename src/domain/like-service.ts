@@ -10,12 +10,13 @@ export class LikeService {
     }
 
     async updateCommentLike(userId: string, commentsId: string, status: string): Promise<boolean>{
-        const isUserAlreadyLikeComment = this.usersRepository.isUserAlreadyLikeComment(userId, commentsId)
+        const isUserAlreadyLikeComment = await this.usersRepository.isUserAlreadyLikeComment(userId, commentsId)
+        console.log('isUserAlreadyLikeComment ', isUserAlreadyLikeComment)
         if (!isUserAlreadyLikeComment){
             const createdAt = new Date()
-            const addedLike = await this.usersRepository.createCommentsLikeObject(userId, commentsId, createdAt, status)
+            const isLikeAdded = await this.usersRepository.createCommentsLikeObject(userId, commentsId, createdAt, status)
             const setCount = await this.commentsRepository.setCountCommentsLike(commentsId, status)
-            return addedLike
+            return isLikeAdded
         }
         const likedComments = await usersQueryRepo.getUsersLikedComments(userId)
         if (!likedComments) return false
