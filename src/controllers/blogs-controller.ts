@@ -68,7 +68,7 @@ export class BlogsController {
             if (!foundBlog) {
                 res.sendStatus(404)
             } else {
-                const newPost = await this.postsService.createPostByBlogId(
+                const newPost = await this.postsService.createPost(
                     req.body.title,
                     req.body.shortDescription,
                     req.body.content,

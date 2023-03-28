@@ -31,7 +31,13 @@ export class PostsQueryRepo {
                 content: posts.content,
                 blogId: posts.blogId,
                 blogName: posts.blogName,
-                createdAt: posts.createdAt
+                createdAt: posts.createdAt,
+                extendedLikesInfo: {
+                    likesCount: posts.likesCount,
+                    dislikesCount: posts.dislikesCount,
+                    myStatus: posts.myStatus,
+                    newestLikes: posts.newestLikes
+                }
             }
         })
 
@@ -69,7 +75,13 @@ export class PostsQueryRepo {
                 content: posts.content,
                 blogId: posts.blogId,
                 blogName: posts.blogName,
-                createdAt: posts.createdAt
+                createdAt: posts.createdAt,
+                extendedLikesInfo: {
+                    likesCount: posts.likesCount,
+                    dislikesCount: posts.dislikesCount,
+                    myStatus: posts.myStatus,
+                    newestLikes: posts.newestLikes
+                }
             }
         })
 
@@ -103,7 +115,13 @@ export class PostsQueryRepo {
             content: post.content,
             blogId: post.blogId,
             blogName: post.blogName,
-            createdAt: post.createdAt
+            createdAt: post.createdAt,
+            extendedLikesInfo: {
+                likesCount: post.likesCount,
+                dislikesCount: post.dislikesCount,
+                myStatus: post.myStatus,
+                newestLikes: post.newestLikes
+            }
         }
     }
 }

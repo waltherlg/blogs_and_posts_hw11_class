@@ -51,10 +51,6 @@ export class UsersService {
         return await this.usersRepository.deleteUser(id)
     }
 
-    async deleteAllUsers(): Promise<boolean>{
-        return await this.usersRepository.deleteAllUsers()
-    }
-
     async isEmailExist (email: string): Promise<boolean> {
         const emailExist = await this.usersRepository.findUserByLoginOrEmail(email)
         if (emailExist) return true

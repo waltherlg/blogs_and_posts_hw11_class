@@ -17,14 +17,16 @@ import {
     URIParamsCommentModel,
     URIParamsPostModel
 } from "../models/models";
-import {Response} from "express";
-import {postsQueryRepo} from "../repositories/post-query-repository";
+import {Request, Response} from "express";
+import {PostsQueryRepo, postsQueryRepo} from "../repositories/post-query-repository";
 import {PostTypeOutput} from "../models/posts-types";
 import {commentsQueryRepo} from "../repositories/comments-query-repository";
 import {injectable} from "inversify";
+import {jwtService} from "../application/jwt-service";
+import {LikeService} from "../domain/like-service";
 @injectable()
 export class PostsController {
-    constructor(protected postsService: PostsService, protected commentService: CommentsService) {
+    constructor(protected postsService: PostsService, protected commentService: CommentsService, protected likeService: LikeService, protected postsQueryRepo: PostsQueryRepo) {
     }
 
     async getAllPosts(req: RequestWithQuery<RequestPostsQueryModel>, res: Response) {
@@ -133,6 +135,29 @@ export class PostsController {
             }
         } catch (error) {
             res.status(500).send(`controller delete post by id error: ${(error as any).message}`)
+        }
+    }
+
+    async setLikeStatusForPost(req: Request, res: Response) {
+        try {
+            const post = await this.postsQueryRepo.getPostByID(req.params.postsId.toString())
+            if (!post) {
+                res.sendStatus(404)
+                return
+            }
+            const userId = req.userId
+
+            let updateCommentLike = await this.likeService.updatePostLike(
+                userId,
+                req.params.postsId.toString(),
+                req.body.likeStatus)
+            if (updateCommentLike) {
+                return res.sendStatus(204)
+            } else {
+                return res.status(400).send('not like')
+            }
+        } catch (error) {
+            return res.status(405).send(`controller post like status error: ${(error as any).message}`)
         }
     }
 }

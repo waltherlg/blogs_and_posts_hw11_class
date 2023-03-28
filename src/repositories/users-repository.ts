@@ -109,6 +109,24 @@ export class UsersRepository {
         return !!result
     }
 
+    async isUserAlreadyLikeComment(userId: string, commentsId: string): Promise<boolean> {
+        if(!ObjectId.isValid(userId)){
+            return false
+        }
+        let _id = new ObjectId(userId)
+        const isExist = await UserModel.findOne({_id: _id, likedComments: {$elemMatch: {commentsId: commentsId}}})
+        return !!isExist
+    }
+
+    async isUserAlreadyLikeCPost(userId: string, postsId: string): Promise<boolean> {
+        if(!ObjectId.isValid(userId)){
+            return false
+        }
+        let _id = new ObjectId(userId)
+        const isLikeExist = await UserModel.findOne({_id: _id, likedPosts: {$elemMatch: {postsId: postsId}}})
+        return !!isLikeExist
+    }
+
     async updateCommentsLikeObject(userId: string, commentsId: string, status: string){
         if (!ObjectId.isValid(userId)){
             return false
@@ -121,14 +139,19 @@ export class UsersRepository {
         return true
     }
 
-    async isUserAlreadyLikeComment(userId: string, commentsId: string): Promise<boolean> {
-        if(!ObjectId.isValid(userId)){
+    async updatePostsLikeObject(userId: string, postsId: string, status: string){
+        if (!ObjectId.isValid(userId)){
             return false
         }
         let _id = new ObjectId(userId)
-        const isExist = await UserModel.findOne({_id: _id, likedComments: {$elemMatch: {commentsId: commentsId}}})
-        return !!isExist
+        let updateStatus = await UserModel.findOneAndUpdate(
+            { _id: _id, 'likedPosts.postsId': postsId },
+            { $set: { 'likedPosts.$.status': status } },
+        )
+        return true
     }
+
+
 }
 
 // export const usersRepository = {
