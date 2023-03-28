@@ -15,7 +15,6 @@ function skipped(pageNumber: string, pageSize: string): number {
 }
 @injectable()
 export class UsersQueryRepo {
-
     async getAllUsers(
         sortBy: string,
         sortDirection: string,
@@ -69,15 +68,6 @@ export class UsersQueryRepo {
             email: user.email,
             createdAt: user.createdAt
         }
-    }
-
-    async isUserAlreadyLikeComment(userId: string, commentsId: string): Promise<boolean> {
-        if(!ObjectId.isValid(userId)){
-            return false
-        }
-        let _id = new ObjectId(userId)
-        const isExist = await UserModel.findOne({_id: _id, likedComments: {$elemMatch: {commentsId: commentsId}}})
-        return !!isExist
     }
 
     async getUsersLikedComments(userId: string){

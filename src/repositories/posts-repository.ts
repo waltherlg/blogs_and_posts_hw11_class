@@ -5,18 +5,10 @@ import {injectable} from "inversify";
 @injectable()
 export class PostsRepository {
 
-    async createPost(newPost: PostDBType): Promise<PostTypeOutput> {
-        const result = await PostModel.insertMany(newPost)
-        let createdPost = {
-            id: newPost._id.toString(),
-            title: newPost.title,
-            shortDescription: newPost.shortDescription,
-            content: newPost.content,
-            blogId: newPost.blogId,
-            blogName: newPost.blogName,
-            createdAt: newPost.createdAt
-        };
-        return createdPost;
+    async createPost(postDTO: PostDBType): Promise<string> {
+        const newPost = new PostModel(postDTO)
+        await newPost.save()
+        return newPost._id.toString();
     }
 
     async updatePost(
@@ -48,13 +40,7 @@ export class PostsRepository {
         else return false
     }
 
-    async deleteAllPosts(): Promise<boolean> {
-        const result = await PostModel.deleteMany({})
-        return result.acknowledged
-    }
-
-
-    async setCountPostsLike(postsId: string, status: string): Promise<boolean> {
+    async setCountPostsLike(postsId: string, status: string, createdAt: Date, userId: string, userLogin: string): Promise<boolean> {
         if (!ObjectId.isValid(postsId)) {
             return false
         }
@@ -63,6 +49,15 @@ export class PostsRepository {
         if (!post) return false
         if (status === 'Like') {
             post.likesCount++
+            const newestLike = {
+                addedAt: createdAt.toISOString(),
+                userId,
+                login: userLogin
+            }
+            post.newestLikes.push(newestLike)
+            if(post.newestLikes.length > 3){
+                post.newestLikes.shift()
+            }
         }
         if (status === 'Dislike') {
             post.dislikesCount++

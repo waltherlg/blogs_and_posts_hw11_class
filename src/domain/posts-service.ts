@@ -11,7 +11,7 @@ export class PostsService {
         title: string,
         shortDescription: string,
         content: string,
-        blogId: string): Promise<PostTypeOutput> {
+        blogId: string): Promise<string> {
         let foundBlog = await this.blogsQueryRepo.getBlogByID(blogId)
         const blogName = foundBlog!.name
         const newPost = new PostDBType(
@@ -26,8 +26,8 @@ export class PostsService {
             0,
             'None',
             [])
-        const createdPost = await this.postsRepository.createPost(newPost)
-        return createdPost
+        const createdPostsId = await this.postsRepository.createPost(newPost)
+        return createdPostsId
     }
 
     async updatePost(

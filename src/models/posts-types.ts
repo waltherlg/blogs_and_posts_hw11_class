@@ -28,8 +28,8 @@ export type PostTypeOutput = {
 }
 
 type extendedLikesInfoType = {
-    likesCount: 0,
-    dislikesCount: 0,
+    likesCount: number,
+    dislikesCount: number,
     "myStatus": string,
     newestLikes: Array<newestLikesType>
 }

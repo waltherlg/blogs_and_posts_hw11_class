@@ -57,12 +57,17 @@ export class PostsController {
 
     async createPost(req: RequestWithBody<CreatePostModel>, res: Response<PostTypeOutput>) {
         try {
-            const newPostResult = await this.postsService.createPost(
+            const newPostId = await this.postsService.createPost(
                 req.body.title,
                 req.body.shortDescription,
                 req.body.content,
                 req.body.blogId)
-            res.status(201).send(newPostResult)
+            const newPost = await this.postsQueryRepo.getPostByID(newPostId)
+            if(!newPost){
+                res.sendStatus(400)
+                return
+            }
+            res.status(201).send(newPost)
         } catch (error) {
             res.sendStatus(400)
         }

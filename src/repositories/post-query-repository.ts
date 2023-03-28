@@ -23,23 +23,23 @@ export class PostsQueryRepo {
             .limit(+pageSize)
             .lean()
 
-        let outPosts = posts.map((posts: PostDBType) => {
+        let outPosts = posts.map((post: PostDBType) => {
             return {
-                id: posts._id.toString(),
-                title: posts.title,
-                shortDescription: posts.shortDescription,
-                content: posts.content,
-                blogId: posts.blogId,
-                blogName: posts.blogName,
-                createdAt: posts.createdAt,
+                id: post._id.toString(),
+                title: post.title,
+                shortDescription: post.shortDescription,
+                content: post.content,
+                blogId: post.blogId,
+                blogName: post.blogName,
+                createdAt: post.createdAt,
                 extendedLikesInfo: {
-                    likesCount: posts.likesCount,
-                    dislikesCount: posts.dislikesCount,
-                    myStatus: posts.myStatus,
-                    newestLikes: posts.newestLikes
+                        likesCount: post.likesCount,
+                        dislikesCount: post.dislikesCount,
+                        myStatus: post.myStatus,
+                        newestLikes: post.newestLikes,
                 }
-            }
-        })
+            };
+        });
 
         let pageCount = Math.ceil(+postsCount / +pageSize)
 

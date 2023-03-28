@@ -19,7 +19,7 @@ export class LikeService {
             const setCount = await this.commentsRepository.setCountCommentsLike(commentsId, status)
             return isLikeAdded
         }
-        const likedComments = await this.usersQueryRepo.getUsersLikedComments(userId)
+        const likedComments = await this.usersRepository.getUsersLikedComments(userId)
         if (!likedComments) return false
         const comment = likedComments.find(c => c.commentsId === commentsId)
         const currentStatus = comment ? comment.status : null
@@ -52,18 +52,32 @@ export class LikeService {
     }
 
     async updatePostLike(userId: string, postsId: string, status: string): Promise<boolean>{
-        const isUserAlreadyLikeComment = await this.usersRepository.isUserAlreadyLikeComment(userId, postsId)
-        console.log('isUserAlreadyLikeComment ', isUserAlreadyLikeComment)
-        if (!isUserAlreadyLikeComment){
+        const user = await this.usersRepository.getUserById(userId)
+        if(!user) return false
+        const usersLikedPost = user.likedPosts.find(post => post.postsId === postsId);
+        if(!usersLikedPost){
             const createdAt = new Date()
-            const isLikeAdded = await this.usersRepository.createCommentsLikeObject(userId, postsId, createdAt, status)
-            const setCount = await this.postsRepository.setCountPostsLike(postsId, status)
-            return isLikeAdded
+            const newLikedPost = {postsId, createdAt, status}
+            user.likedPosts.push(newLikedPost)
+            const result = await this.usersRepository.saveUser(user)
+            const setCount = await this.postsRepository.setCountPostsLike(postsId, status, createdAt, userId, user.login)
+            return result
         }
-        const likedComments = await this.usersQueryRepo.getUsersLikedComments(userId)
-        if (!likedComments) return false
-        const comment = likedComments.find(c => c.commentsId === postsId)
-        const currentStatus = comment ? comment.status : null
+
+        // const isUserAlreadyLikePost = await this.usersRepository.isUserAlreadyLikeCPost(userId, postsId)
+        // if (!isUserAlreadyLikePost){
+        //
+        //     const createdAt = new Date()
+        //     const isLikeAdded = await this.usersRepository.createPostsLikeObject(userId, postsId, createdAt, status)
+        //     const setCount = await this.postsRepository.setCountPostsLike(postsId, status)
+        //     return isLikeAdded
+        // }
+
+        // const likedPosts = await this.usersRepository.getUsersLikedPosts(userId)
+        // if (!likedPosts) return false
+        // const post = likedPosts.find(c => c.postsId === postsId)
+
+        const currentStatus = usersLikedPost ? usersLikedPost.status : null
 
         if(currentStatus !== status){
             await this.usersRepository.updatePostsLikeObject(userId, postsId, status)
