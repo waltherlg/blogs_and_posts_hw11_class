@@ -49,12 +49,12 @@ export class PostsRepository {
         if (!post) return false
         if (status === 'Like') {
             post.likesCount++
-            const newestLike = {
+            const newLike = {
                 addedAt: createdAt.toISOString(),
                 userId,
                 login: userLogin
             }
-            post.newestLikes.push(newestLike)
+            post.newestLikes.push(newLike)
             if(post.newestLikes.length > 3){
                 post.newestLikes.shift()
             }
