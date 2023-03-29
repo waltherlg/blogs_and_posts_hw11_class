@@ -7,8 +7,6 @@ import {PostModel} from "../schemes/schemes";
 import {ObjectId} from "mongodb";
 import {injectable} from "inversify";
 
-class PostsDBType {
-}
 
 @injectable()
 export class PostsQueryRepo {
@@ -17,7 +15,8 @@ export class PostsQueryRepo {
         sortBy: string,
         sortDirection: string,
         pageNumber: string,
-        pageSize: string,) {
+        pageSize: string,
+        userId?: string) {
 
         let postsCount = await PostModel.countDocuments({})
 
@@ -28,6 +27,10 @@ export class PostsQueryRepo {
             .lean()
 
         let outPosts = posts.map((post: PostDBType) => {
+            const newestLikes = post.likesCollection
+                .filter(n => n.status === 'Like')
+                .sort((a, b) => b.addedAt.localeCompare(a.addedAt))
+                .slice(0, 3)
             return {
                 id: post._id.toString(),
                 title: post.title,
@@ -37,13 +40,13 @@ export class PostsQueryRepo {
                 blogName: post.blogName,
                 createdAt: post.createdAt,
                 extendedLikesInfo: {
-                        likesCount: post.likesCount,
-                        dislikesCount: post.dislikesCount,
-                        myStatus: post.myStatus,
-                        newestLikes: post.newestLikes,
+                    likesCount: post.likesCount,
+                    dislikesCount: post.dislikesCount,
+                    myStatus: post.myStatus,
+                    newestLikes: newestLikes
                 }
-            };
-        });
+            }
+        })
 
         let pageCount = Math.ceil(+postsCount / +pageSize)
 
@@ -63,7 +66,8 @@ export class PostsQueryRepo {
         sortBy: string,
         sortDirection: string,
         pageNumber: string,
-        pageSize: string,) {
+        pageSize: string,
+        userId?: string) {
 
         let posts = await PostModel.find({"blogId": blogId})
             .skip(skipped(pageNumber, pageSize))
@@ -71,20 +75,24 @@ export class PostsQueryRepo {
             .sort({[sortBy]: sort(sortDirection)})
             .lean()
 
-        let outPosts = posts.map((posts: PostDBType) => {
+        let outPosts = posts.map((post: PostDBType) => {
+            const newestLikes = post.likesCollection
+                .filter(n => n.status === 'Like')
+                .sort((a, b) => b.addedAt.localeCompare(a.addedAt))
+                .slice(0, 3)
             return {
-                id: posts._id.toString(),
-                title: posts.title,
-                shortDescription: posts.shortDescription,
-                content: posts.content,
-                blogId: posts.blogId,
-                blogName: posts.blogName,
-                createdAt: posts.createdAt,
+                id: post._id.toString(),
+                title: post.title,
+                shortDescription: post.shortDescription,
+                content: post.content,
+                blogId: post.blogId,
+                blogName: post.blogName,
+                createdAt: post.createdAt,
                 extendedLikesInfo: {
-                    likesCount: posts.likesCount,
-                    dislikesCount: posts.dislikesCount,
-                    myStatus: posts.myStatus,
-                    newestLikes: posts.newestLikes
+                    likesCount: post.likesCount,
+                    dislikesCount: post.dislikesCount,
+                    myStatus: post.myStatus,
+                    newestLikes: newestLikes
                 }
             }
         })
@@ -103,7 +111,7 @@ export class PostsQueryRepo {
         return outputPosts
     }
 
-    async getPostByID(id: string): Promise<PostTypeOutput | null> {
+    async getPostByID(id: string, userId?: string): Promise<PostTypeOutput | null> {
         if (!ObjectId.isValid(id)){
             return null
         }
@@ -112,10 +120,20 @@ export class PostsQueryRepo {
         if (!post) {
             return null
         }
-        const newestLikes = post.newestLikes
+        const postLikesCollection = post.likesCollection
+        console.log('userId ', userId)
+        console.log('postLikesCollection ', postLikesCollection)
+
+        const isUserLikePost = postLikesCollection.find(p => p.userId === userId)
+        console.log('isUserLikePost ', isUserLikePost)
+        if(isUserLikePost){
+            post.myStatus = isUserLikePost.status
+        }
+        const newestLikes = post.likesCollection
             .filter(n => n.status === 'Like')
             .sort((a, b) => b.addedAt.localeCompare(a.addedAt))
             .slice(0, 3)
+
         return {
             id: post._id.toString(),
             title: post.title,
@@ -134,4 +152,5 @@ export class PostsQueryRepo {
     }
 }
 
-// export const postsQueryRepo = new PostsQueryRepo()
+// export const postsQueryRepo = new PostsQueryRepo()х
+

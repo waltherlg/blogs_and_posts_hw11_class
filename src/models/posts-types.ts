@@ -11,7 +11,7 @@ export class PostDBType {
                 public likesCount: number,
                 public dislikesCount: number,
                 public myStatus: string,
-                public  newestLikes: Array<newestLikesType>
+                public  likesCollection: Array<likesCollectionType>
     ) {
     }
 }
@@ -31,10 +31,10 @@ type extendedLikesInfoType = {
     likesCount: number,
     dislikesCount: number,
     myStatus: string,
-    newestLikes: Array<newestLikesType>
+    newestLikes: Array<likesCollectionType>
 }
 
-type newestLikesType = {
+type likesCollectionType = {
     addedAt: string,
     userId: string,
     login: string,

@@ -16,9 +16,11 @@ const postsControllerInstance = container.resolve(PostsController)
 export const postsRouter = Router({})
 
 postsRouter.get('/',
+    optionalAuthMiddleware,
     postsControllerInstance.getAllPosts.bind(postsControllerInstance))
 
 postsRouter.get('/:postId',
+    optionalAuthMiddleware,
     postsControllerInstance.getPostById.bind(postsControllerInstance))
 
 postsRouter.post('/',

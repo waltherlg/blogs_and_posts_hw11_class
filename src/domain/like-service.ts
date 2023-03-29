@@ -55,6 +55,7 @@ export class LikeService {
         const user = await this.usersRepository.getUserById(userId)
         if(!user) return false
         const usersLikedPost = user.likedPosts.find(post => post.postsId === postsId);
+        console.log('usersLikedPost in like servoce ', usersLikedPost)
         if(!usersLikedPost){
             const createdAt = new Date()
             const newLikedPost = {postsId, createdAt, status}

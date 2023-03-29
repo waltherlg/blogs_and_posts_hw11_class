@@ -9,7 +9,7 @@ import {
     titleValidation,
     websiteUrlValidation
 } from "../middlewares/input-validation-middleware/input-validation-middleware";
-import {basicAuthMiddleware} from "../middlewares/basic-auth.middleware";
+import {basicAuthMiddleware, optionalAuthMiddleware} from "../middlewares/basic-auth.middleware";
 import {container} from "../compositions-root";
 import {BlogsController} from "../controllers/blogs-controller";
 
@@ -39,6 +39,7 @@ blogsRouter.get('/:id',
     blogsControllerInstance.getBlogById.bind(blogsControllerInstance))
 
 blogsRouter.get('/:id/posts',
+    optionalAuthMiddleware,
     blogsControllerInstance.getAllPostsByBlogsId.bind(blogsControllerInstance))
 
 blogsRouter.delete('/:id',

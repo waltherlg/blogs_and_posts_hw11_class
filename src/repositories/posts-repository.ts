@@ -53,7 +53,7 @@ export class PostsRepository {
             login: userLogin,
             status: status
         }
-        post.newestLikes.push(newLike)
+        post.likesCollection.push(newLike)
         if (status === 'Like') {
             post.likesCount++
         }

@@ -29,7 +29,6 @@ export class CommentsQueryRepo {
 
         let likedComment: Array<CommentsLikeType> = []
         const user: UserDBType | null = await UserModel.findOne({_id: new ObjectId(userId)})
-        console.log(user)
         if (user){
             likedComment = user.likedComments
         }
@@ -44,7 +43,6 @@ export class CommentsQueryRepo {
             if (isUserLikeIt){
                 myStatus = isUserLikeIt.status
             }
-            console.log(myStatus)
 
             return {
                 id: comments._id.toString(),

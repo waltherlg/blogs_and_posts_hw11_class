@@ -29,22 +29,22 @@ export class PostsController {
     constructor(protected postsService: PostsService, protected commentService: CommentsService, protected likeService: LikeService, protected postsQueryRepo: PostsQueryRepo) {
     }
 
-    async getAllPosts(req: RequestWithQuery<RequestPostsQueryModel>, res: Response) {
+    async getAllPosts(req: RequestWithQuery<RequestPostsQueryModel> & { userId?: string }, res: Response) {
         try {
             let sortBy = req.query.sortBy ? req.query.sortBy : 'createdAt'
             let sortDirection = req.query.sortDirection ? req.query.sortDirection : 'desc'
             let pageNumber = req.query.pageNumber ? req.query.pageNumber : '1'
             let pageSize = req.query.pageSize ? req.query.pageSize : '10'
-            const allPosts = await this.postsQueryRepo.getAllPosts(sortBy, sortDirection, pageNumber, pageSize)
+            const allPosts = await this.postsQueryRepo.getAllPosts(sortBy, sortDirection, pageNumber, pageSize, req.userId)
             res.status(200).send(allPosts);
         } catch (error) {
             res.status(400).send(`controller get all posts error: ${(error as any).message}`)
         }
     }
 
-    async getPostById(req: RequestWithParams<URIParamsPostModel>, res: Response) {
+    async getPostById(req: RequestWithParams<URIParamsPostModel>  & { userId?: string }, res: Response) {
         try {
-            let foundPost = await this.postsQueryRepo.getPostByID(req.params.postId.toString())
+            let foundPost = await this.postsQueryRepo.getPostByID(req.params.postId.toString(), req.userId)
             if (foundPost) {
                 res.status(200).send(foundPost)
             } else {
@@ -151,12 +151,13 @@ export class PostsController {
                 return
             }
             const userId = req.userId
+            console.log('user id in controller ', userId)
 
-            let updateCommentLike = await this.likeService.updatePostLike(
+            let updatePostLike = await this.likeService.updatePostLike(
                 userId,
                 req.params.postsId.toString(),
                 req.body.likeStatus)
-            if (updateCommentLike) {
+            if (updatePostLike) {
                 return res.sendStatus(204)
             } else {
                 return res.status(400).send('not like')

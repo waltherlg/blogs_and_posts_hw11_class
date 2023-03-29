@@ -93,7 +93,7 @@ export class BlogsController {
         }
     }
 
-    async getAllPostsByBlogsId(req: RequestWithParamsAndQuery<URIParamsBlogModel, RequestPostsByBlogsIdQueryModel>, res: Response) {
+    async getAllPostsByBlogsId(req: RequestWithParamsAndQuery<URIParamsBlogModel, RequestPostsByBlogsIdQueryModel> & { userId?: string }, res: Response) {
         let foundBlog = await this.blogsQueryRepo.getBlogByID(req.params.id.toString()) // check is blog exist
         if (!foundBlog) {
             res.sendStatus(404)
@@ -104,7 +104,7 @@ export class BlogsController {
                 let sortDirection = req.query.sortDirection ? req.query.sortDirection : 'desc'
                 let pageNumber = req.query.pageNumber ? req.query.pageNumber : '1'
                 let pageSize = req.query.pageSize ? req.query.pageSize : '10'
-                let foundPosts = await this.postsQueryRepo.getAllPostsByBlogsID(blogId, sortBy, sortDirection, pageNumber, pageSize)
+                let foundPosts = await this.postsQueryRepo.getAllPostsByBlogsID(blogId, sortBy, sortDirection, pageNumber, pageSize, req.userId)
                 if (foundPosts) {
                     res.status(200).send(foundPosts)
                 }
