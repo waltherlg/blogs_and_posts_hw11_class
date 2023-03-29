@@ -47,17 +47,15 @@ export class PostsRepository {
         let _id = new ObjectId(postsId)
         let post = await PostModel.findOne({_id: _id})
         if (!post) return false
+        const newLike = {
+            addedAt: createdAt.toISOString(),
+            userId,
+            login: userLogin,
+            status: status
+        }
+        post.newestLikes.push(newLike)
         if (status === 'Like') {
             post.likesCount++
-            const newLike = {
-                addedAt: createdAt.toISOString(),
-                userId,
-                login: userLogin
-            }
-            post.newestLikes.push(newLike)
-            if(post.newestLikes.length > 3){
-                post.newestLikes.shift()
-            }
         }
         if (status === 'Dislike') {
             post.dislikesCount++

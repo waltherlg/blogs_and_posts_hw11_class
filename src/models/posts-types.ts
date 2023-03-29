@@ -30,12 +30,13 @@ export type PostTypeOutput = {
 type extendedLikesInfoType = {
     likesCount: number,
     dislikesCount: number,
-    "myStatus": string,
+    myStatus: string,
     newestLikes: Array<newestLikesType>
 }
 
 type newestLikesType = {
     addedAt: string,
     userId: string,
-    login: string
+    login: string,
+    status: string
 }

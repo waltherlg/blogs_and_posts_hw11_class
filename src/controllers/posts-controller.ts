@@ -18,7 +18,7 @@ import {
     URIParamsPostModel
 } from "../models/models";
 import {Request, Response} from "express";
-import {PostsQueryRepo, postsQueryRepo} from "../repositories/post-query-repository";
+import {PostsQueryRepo} from "../repositories/post-query-repository";
 import {PostTypeOutput} from "../models/posts-types";
 import {commentsQueryRepo} from "../repositories/comments-query-repository";
 import {injectable} from "inversify";
@@ -35,7 +35,7 @@ export class PostsController {
             let sortDirection = req.query.sortDirection ? req.query.sortDirection : 'desc'
             let pageNumber = req.query.pageNumber ? req.query.pageNumber : '1'
             let pageSize = req.query.pageSize ? req.query.pageSize : '10'
-            const allPosts = await postsQueryRepo.getAllPosts(sortBy, sortDirection, pageNumber, pageSize)
+            const allPosts = await this.postsQueryRepo.getAllPosts(sortBy, sortDirection, pageNumber, pageSize)
             res.status(200).send(allPosts);
         } catch (error) {
             res.status(400).send(`controller get all posts error: ${(error as any).message}`)
@@ -44,7 +44,7 @@ export class PostsController {
 
     async getPostById(req: RequestWithParams<URIParamsPostModel>, res: Response) {
         try {
-            let foundPost = await postsQueryRepo.getPostByID(req.params.postId.toString())
+            let foundPost = await this.postsQueryRepo.getPostByID(req.params.postId.toString())
             if (foundPost) {
                 res.status(200).send(foundPost)
             } else {
@@ -75,7 +75,7 @@ export class PostsController {
 
     async createCommentByPostId(req: RequestWithParamsAndBody<URIParamsCommentModel, CreateCommentModel>, res: Response) {
         try {
-            let foundPost = await postsQueryRepo.getPostByID(req.params.postId.toString())
+            let foundPost = await this.postsQueryRepo.getPostByID(req.params.postId.toString())
             if (!foundPost) {
                 res.sendStatus(404)
                 return
@@ -93,7 +93,7 @@ export class PostsController {
 
     async getCommentsByPostId(req: RequestWithParamsAndQuery<URIParamsPostModel & { userId?: string }, RequestCommentsByPostIdQueryModel>, res: Response) {
         try {
-            const foundPost = await postsQueryRepo.getPostByID(req.params.postId.toString())
+            const foundPost = await this.postsQueryRepo.getPostByID(req.params.postId.toString())
             if (!foundPost) {
                 res.sendStatus(404)
             } else {

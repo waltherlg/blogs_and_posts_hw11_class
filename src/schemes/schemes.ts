@@ -57,7 +57,8 @@ export const BlogModelClass = mongoose.model('blogs', blogSchema)
 const newestLikesSchema = new mongoose.Schema({
     addedAt: String,
     userId: String,
-    login: String
+    login: String,
+    status: String
 })
 export const postSchema = new mongoose.Schema<PostDBType>({
     _id: ObjectId,

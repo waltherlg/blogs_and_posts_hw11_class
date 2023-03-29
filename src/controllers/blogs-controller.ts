@@ -18,12 +18,12 @@ import {
 } from "../models/models";
 import {Response} from "express";
 import {BlogsQueryRepo} from "../repositories/blog-query-repository";
-import {postsQueryRepo} from "../repositories/post-query-repository";
 import {inject, injectable} from "inversify";
+import {PostsQueryRepo} from "../repositories/post-query-repository";
 
 @injectable()
 export class BlogsController {
-    constructor(protected blogsService: BlogsService, protected postsService: PostsService, protected blogsQueryRepo: BlogsQueryRepo) {
+    constructor(protected blogsService: BlogsService, protected postsService: PostsService, protected blogsQueryRepo: BlogsQueryRepo, protected postsQueryRepo: PostsQueryRepo) {
     }
 
     async getAllBlogs(req: RequestWithQuery<RequestBlogsQueryModel>, res: Response) {
@@ -104,7 +104,7 @@ export class BlogsController {
                 let sortDirection = req.query.sortDirection ? req.query.sortDirection : 'desc'
                 let pageNumber = req.query.pageNumber ? req.query.pageNumber : '1'
                 let pageSize = req.query.pageSize ? req.query.pageSize : '10'
-                let foundPosts = await postsQueryRepo.getAllPostsByBlogsID(blogId, sortBy, sortDirection, pageNumber, pageSize)
+                let foundPosts = await this.postsQueryRepo.getAllPostsByBlogsID(blogId, sortBy, sortDirection, pageNumber, pageSize)
                 if (foundPosts) {
                     res.status(200).send(foundPosts)
                 }

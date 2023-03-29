@@ -6,6 +6,10 @@ import {skipped} from "../application/functions";
 import {PostModel} from "../schemes/schemes";
 import {ObjectId} from "mongodb";
 import {injectable} from "inversify";
+
+class PostsDBType {
+}
+
 @injectable()
 export class PostsQueryRepo {
 
@@ -104,10 +108,14 @@ export class PostsQueryRepo {
             return null
         }
         let _id = new ObjectId(id)
-        const post: any | null = await PostModel.findOne({_id: _id})
+        const post: PostDBType | null = await PostModel.findOne({_id: _id})
         if (!post) {
             return null
         }
+        const newestLikes = post.newestLikes
+            .filter(n => n.status === 'Like')
+            .sort((a, b) => b.addedAt.localeCompare(a.addedAt))
+            .slice(0, 3)
         return {
             id: post._id.toString(),
             title: post.title,
@@ -120,10 +128,10 @@ export class PostsQueryRepo {
                 likesCount: post.likesCount,
                 dislikesCount: post.dislikesCount,
                 myStatus: post.myStatus,
-                newestLikes: post.newestLikes
+                newestLikes: newestLikes
             }
         }
     }
 }
 
-export const postsQueryRepo = new PostsQueryRepo()
+// export const postsQueryRepo = new PostsQueryRepo()
