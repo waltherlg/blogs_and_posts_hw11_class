@@ -2,8 +2,15 @@ import {ObjectId} from "mongodb";
 import {PostDBType, PostTypeOutput} from "../models/posts-types";
 import {CommentModel, PostModel} from "../schemes/schemes";
 import {injectable} from "inversify";
+import {HydratedDocument} from "mongoose";
+import {UserDBType} from "../models/users-types";
 @injectable()
 export class PostsRepository {
+
+    async savePost(post: HydratedDocument<PostDBType>){
+        const result = await post.save()
+        return !!result
+    }
 
     async createPost(postDTO: PostDBType): Promise<string> {
         const newPost = new PostModel(postDTO)
@@ -110,5 +117,17 @@ export class PostsRepository {
         post.dislikesCount -= 1
         const result = await post.save()
         return !!result
+    }
+
+    async getPostByID(id: string): Promise<HydratedDocument<PostDBType> | null> {
+        if (!ObjectId.isValid(id)) {
+            return null
+        }
+        let _id = new ObjectId(id)
+        const post = await PostModel.findOne({_id: _id})
+        if (!post) {
+            return null
+        }
+        return post
     }
 }

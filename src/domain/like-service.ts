@@ -4,6 +4,8 @@ import {CommentsRepository} from "../repositories/comments-repository";
 import {th} from "date-fns/locale";
 import {injectable} from "inversify";
 import {PostsRepository} from "../repositories/posts-repository";
+import {HydratedDocument} from "mongoose";
+import {PostDBType} from "../models/posts-types";
 
 @injectable()
 export class LikeService {
@@ -54,55 +56,51 @@ export class LikeService {
     async updatePostLike(userId: string, postsId: string, status: string): Promise<boolean>{
         const user = await this.usersRepository.getUserById(userId)
         if(!user) return false
-        const usersLikedPost = user.likedPosts.find(post => post.postsId === postsId);
-        console.log('usersLikedPost in like servoce ', usersLikedPost)
-        if(!usersLikedPost){
+        const post = await this.postsRepository.getPostByID(postsId)
+        if(!post) return false
+        const postsLikesCollection = post.likesCollection
+        const userAlreadyLikedPost = postsLikesCollection.find(post => post.userId === userId)
+        if(!userAlreadyLikedPost){
             const createdAt = new Date()
-            const newLikedPost = {postsId, createdAt, status}
-            user.likedPosts.push(newLikedPost)
-            const result = await this.usersRepository.saveUser(user)
-            const setCount = await this.postsRepository.setCountPostsLike(postsId, status, createdAt, userId, user.login)
+            const newLike = {
+                addedAt: createdAt.toISOString(),
+                userId,
+                login: user.login,
+                status: status
+            }
+            post.likesCollection.push(newLike)
+            const result = await this.postsRepository.savePost(post)
             return result
         }
+        userAlreadyLikedPost.status = status
+        const result = await this.postsRepository.savePost(post)
+        return result
 
-        // const isUserAlreadyLikePost = await this.usersRepository.isUserAlreadyLikeCPost(userId, postsId)
-        // if (!isUserAlreadyLikePost){
+        // const currentStatus = usersLikedPost ? usersLikedPost.status : null
         //
-        //     const createdAt = new Date()
-        //     const isLikeAdded = await this.usersRepository.createPostsLikeObject(userId, postsId, createdAt, status)
-        //     const setCount = await this.postsRepository.setCountPostsLike(postsId, status)
-        //     return isLikeAdded
-        // }
-
-        // const likedPosts = await this.usersRepository.getUsersLikedPosts(userId)
-        // if (!likedPosts) return false
-        // const post = likedPosts.find(c => c.postsId === postsId)
-
-        const currentStatus = usersLikedPost ? usersLikedPost.status : null
-
-        if(currentStatus !== status){
-            await this.usersRepository.updatePostsLikeObject(userId, postsId, status)
-            if(currentStatus === "None" && status === 'Like'){
-                await this.postsRepository.increasePostsLikes(postsId)
-            }
-            if(currentStatus === "None" && status === 'Dislike'){
-                await this.postsRepository.increasePostsDislikes(postsId)
-            }
-            if(currentStatus === 'Like' && status === 'None'){
-                await this.postsRepository.decreasePostsLikes(postsId)
-            }
-            if(currentStatus === 'Dislike' && status === 'None'){
-                await this.postsRepository.decreasePostsDislikes(postsId)
-            }
-            if(currentStatus === 'Like' && status === 'Dislike'){
-                await this.postsRepository.decreasePostsLikes(postsId)
-                await this.postsRepository.increasePostsDislikes(postsId)
-            }
-            if(currentStatus === 'Dislike' && status === 'Like'){
-                await this.postsRepository.decreasePostsDislikes(postsId)
-                await this.postsRepository.increasePostsLikes(postsId)
-            }
-            return true
-        } else return true
+        // if(currentStatus !== status){
+        //     await this.usersRepository.updatePostsLikeObject(userId, postsId, status)
+        //     if(currentStatus === "None" && status === 'Like'){
+        //         await this.postsRepository.increasePostsLikes(postsId)
+        //     }
+        //     if(currentStatus === "None" && status === 'Dislike'){
+        //         await this.postsRepository.increasePostsDislikes(postsId)
+        //     }
+        //     if(currentStatus === 'Like' && status === 'None'){
+        //         await this.postsRepository.decreasePostsLikes(postsId)
+        //     }
+        //     if(currentStatus === 'Dislike' && status === 'None'){
+        //         await this.postsRepository.decreasePostsDislikes(postsId)
+        //     }
+        //     if(currentStatus === 'Like' && status === 'Dislike'){
+        //         await this.postsRepository.decreasePostsLikes(postsId)
+        //         await this.postsRepository.increasePostsDislikes(postsId)
+        //     }
+        //     if(currentStatus === 'Dislike' && status === 'Like'){
+        //         await this.postsRepository.decreasePostsDislikes(postsId)
+        //         await this.postsRepository.increasePostsLikes(postsId)
+        //     }
+        //     return true
+        // } else return true
     }
 }
