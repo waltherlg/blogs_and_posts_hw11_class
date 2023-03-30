@@ -11,7 +11,7 @@ testingRouter.delete('/all-data',
             await UserModel.deleteMany({})
             await CommentModel.deleteMany({})
             await UserDeviceModel.deleteMany({})
-            return res.sendStatus(204)
+            res.sendStatus(204)
         } catch (error) {
             res.status(500).send(`controller testing (delete all data) error: ${(error as any).message}`)
         }
