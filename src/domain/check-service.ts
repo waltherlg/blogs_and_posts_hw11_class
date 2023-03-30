@@ -1,47 +1,42 @@
 
-import {checkUsersRepo, container} from "../compositions-root";
-import {BlogsQueryRepo} from "../repositories/blog-query-repository";
-import {UsersQueryRepo} from "../repositories/users-query-repository";
+import {container} from "../compositions-root";
+import {UsersRepository} from "../repositories/users-repository";
 
-const usersQueryRepo = container.resolve(UsersQueryRepo)
+const usersRepository = container.resolve(UsersRepository)
 
 export const checkService = {
     async isUserExist(userId: string): Promise<boolean> {
-        const user = await usersQueryRepo.getUserById(userId)
+        const user = await usersRepository.getUserById(userId)
         return !!user;
     },
 
     async isLoginExist (login: string): Promise<boolean> {
-        const loginExist = await checkUsersRepo.findUserByLoginOrEmail(login)
-        if (loginExist) return true
-        else return false
+        const loginExist = await usersRepository.findUserByLoginOrEmail(login)
+        return !!loginExist;
     },
 
-    async isConfirmationCodeExist(code: string){
-        let user = await checkUsersRepo.getUserByConfirmationCode(code)
+    async isConfirmationCodeExist(code: string): Promise<boolean> {
+        let user = await usersRepository.getUserByConfirmationCode(code)
         return !!user;
     },
 
     async isEmailConfirmed(email: string): Promise<boolean> {
-        const user = await checkUsersRepo.findUserByLoginOrEmail(email)
-        if (user!.isConfirmed) return true
-        else return false
+        const user = await usersRepository.findUserByLoginOrEmail(email)
+        return user!.isConfirmed;
     },
 
     async isEmailExist (email: string): Promise<boolean> {
-        const emailExist = await checkUsersRepo.findUserByLoginOrEmail(email)
-        if (emailExist) return true
-        else return false
+        const emailExist = await usersRepository.findUserByLoginOrEmail(email)
+        return !!emailExist;
     },
 
     async isCodeConfirmed(code: string): Promise<boolean> {
-        const user = await checkUsersRepo.getUserByConfirmationCode(code)
-        if (user!.isConfirmed) return true
-        else return false
+        const user = await usersRepository.getUserByConfirmationCode(code)
+        return user!.isConfirmed;
     },
 
-    async isRecoveryCodeExist(code: string){
-        let isExist = await checkUsersRepo.getUserByPasswordRecoveryCode(code)
+    async isRecoveryCodeExist(code: string): Promise<boolean> {
+        let isExist = await usersRepository.getUserByPasswordRecoveryCode(code)
         return !!isExist;
     }
 }

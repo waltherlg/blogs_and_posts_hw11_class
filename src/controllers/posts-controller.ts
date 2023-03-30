@@ -20,13 +20,17 @@ import {
 import {Request, Response} from "express";
 import {PostsQueryRepo} from "../repositories/post-query-repository";
 import {PostTypeOutput} from "../models/posts-types";
-import {commentsQueryRepo} from "../repositories/comments-query-repository";
+import {CommentsQueryRepo} from "../repositories/comments-query-repository";
 import {injectable} from "inversify";
 import {jwtService} from "../application/jwt-service";
 import {LikeService} from "../domain/like-service";
 @injectable()
 export class PostsController {
-    constructor(protected postsService: PostsService, protected commentService: CommentsService, protected likeService: LikeService, protected postsQueryRepo: PostsQueryRepo) {
+    constructor(protected postsService: PostsService,
+                protected commentService: CommentsService,
+                protected likeService: LikeService,
+                protected postsQueryRepo: PostsQueryRepo,
+                protected commentsQueryRepo: CommentsQueryRepo) {
     }
 
     async getAllPosts(req: RequestWithQuery<RequestPostsQueryModel> & { userId?: string }, res: Response) {
@@ -84,7 +88,7 @@ export class PostsController {
                 req.params.postId,
                 req.body.content,
                 req.userId)
-            const newComment = await commentsQueryRepo.getCommentById(newCommentId)
+            const newComment = await this.commentsQueryRepo.getCommentById(newCommentId)
             res.status(201).send(newComment)
         } catch (error) {
             res.status(400).send(`controller create comment by post id error: ${(error as any).message}`)
@@ -102,7 +106,7 @@ export class PostsController {
                 let sortDirection = req.query.sortDirection ? req.query.sortDirection : 'desc'
                 let pageNumber = req.query.pageNumber ? req.query.pageNumber : '1'
                 let pageSize = req.query.pageSize ? req.query.pageSize : '10'
-                let foundComments = await commentsQueryRepo.getAllCommentsByPostId(postId, sortBy, sortDirection, pageNumber, pageSize, req.userId)
+                let foundComments = await this.commentsQueryRepo.getAllCommentsByPostId(postId, sortBy, sortDirection, pageNumber, pageSize, req.userId)
                 if (foundComments) {
                     res.status(200).send(foundComments)
                 }

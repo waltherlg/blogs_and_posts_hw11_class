@@ -23,7 +23,6 @@ export class BlogsRepository {
             return !!result
         }
         else return false
-
     }
 
     async deleteBlog(id: string): Promise<boolean>{
@@ -34,11 +33,6 @@ export class BlogsRepository {
         }
         else return false
 
-    }
-
-    async deleteAllBlogs(): Promise<boolean> {
-        const result = await BlogModelClass.deleteMany({})
-        return result.acknowledged
     }
 }
 

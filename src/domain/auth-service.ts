@@ -34,30 +34,26 @@ export class AuthService {
         const passwordHash = await cryptoAdapter.generateHash(password)
         //const passwordHash = await this._generateHash(password, passwordSalt)
 
-        const newUser: UserDBType = {
-            "_id": new ObjectId(),
-            "login": login,
+        const userDTO = new UserDBType(
+            new ObjectId(),
+            login,
             passwordHash,
-            "email": email,
-            "createdAt": new Date().toISOString(),
-            "confirmationCode": uuid4(),
-            "expirationDateOfConfirmationCode": add(new Date(),{
-                hours: 1
-                //minutes: 3
-            }),
-            "isConfirmed": false,
-            'passwordRecoveryCode': null,
-            'expirationDateOfRecoveryCode': null,
-            'likedComments': [],
-            'likedPosts': []
-        }
-        const createdUser = await this.usersRepository.createUser(newUser)
+            email,
+            new Date().toISOString(),
+            null,
+            null,
+            false,
+            null,
+            null,
+            [],
+            [])
+        const createdUser = await this.usersRepository.createUser(userDTO)
 
         try {
-            await emailManager.sendEmailConfirmationMessage(newUser)
+            await emailManager.sendEmailConfirmationMessage(userDTO)
         }
         catch (e) {
-            await this.usersRepository.deleteUser(newUser._id.toString())
+            await this.usersRepository.deleteUser(userDTO._id.toString())
             return null
         }
         return createdUser._id.toString()
