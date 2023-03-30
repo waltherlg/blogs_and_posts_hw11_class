@@ -25,9 +25,9 @@ export class PostsQueryRepo {
             .limit(+pageSize)
 
         let outPosts = posts.map((post: PostDBType) => {
-            const isUserLikePost = post.likesCollection.find(p => p.userId === userId)
-            if(isUserLikePost){
-                post.myStatus = isUserLikePost.status
+            const userPostStatus = post.likesCollection.find(p => p.userId === userId)
+            if(userPostStatus){
+                post.myStatus = userPostStatus.status
             }
             return post.getOutputType()
         })
@@ -58,9 +58,9 @@ export class PostsQueryRepo {
             .sort({[sortBy]: sort(sortDirection)})
 
         let outPosts = posts.map((post: PostDBType) => {
-            const isUserLikePost = post.likesCollection.find(p => p.userId === userId)
-            if(isUserLikePost){
-                post.myStatus = isUserLikePost.status
+            const userPostStatus = post.likesCollection.find(p => p.userId === userId)
+            if(userPostStatus){
+                post.myStatus = userPostStatus.status
             }
             return post.getOutputType()
         })

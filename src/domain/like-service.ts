@@ -59,8 +59,8 @@ export class LikeService {
         const post = await this.postsRepository.getPostByID(postsId)
         if(!post) return false
         const postsLikesCollection = post.likesCollection
-        const userAlreadyLikedPost = postsLikesCollection.find(post => post.userId === userId)
-        if(!userAlreadyLikedPost){
+        const userPostStatus = postsLikesCollection.find(post => post.userId === userId)
+        if(!userPostStatus){
             const createdAt = new Date()
             const newLike = {
                 addedAt: createdAt.toISOString(),
@@ -72,7 +72,7 @@ export class LikeService {
             const result = await this.postsRepository.savePost(post)
             return result
         }
-        userAlreadyLikedPost.status = status
+        userPostStatus.status = status
         const result = await this.postsRepository.savePost(post)
         return result
 
