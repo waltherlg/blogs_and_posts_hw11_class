@@ -29,8 +29,9 @@ export class PostsQueryRepo {
             if(userPostStatus){
                 post.myStatus = userPostStatus.status
             }
-            const postClassInstance = new PostDBType(post._id, post.title, post.shortDescription, post.content, post.blogId, post.blogName, post.createdAt, post.likesCount, post.dislikesCount, post.myStatus, post.likesCollection)
-            return postClassInstance.getOutputType()
+            // const postClassInstance = new PostDBType(post._id, post.title, post.shortDescription, post.content, post.blogId, post.blogName, post.createdAt, post.likesCount, post.dislikesCount, post.myStatus, post.likesCollection)
+            // return postClassInstance.getOutputType()
+            return this.preparePostForOutput(post)
         })
 
         let pageCount = Math.ceil(+postsCount / +pageSize)
@@ -63,8 +64,9 @@ export class PostsQueryRepo {
             if(userPostStatus){
                 post.myStatus = userPostStatus.status
             }
-            const postClassInstance = new PostDBType(post._id, post.title, post.shortDescription, post.content, post.blogId, post.blogName, post.createdAt, post.likesCount, post.dislikesCount, post.myStatus, post.likesCollection)
-            return postClassInstance.getOutputType()
+            // const postClassInstance = new PostDBType(post._id, post.title, post.shortDescription, post.content, post.blogId, post.blogName, post.createdAt, post.likesCount, post.dislikesCount, post.myStatus, post.likesCollection)
+            // return postClassInstance.getOutputType()
+            return this.preparePostForOutput(post)
         })
         let postsCount = await PostModel.countDocuments({"blogId": blogId})
         let pageCount = Math.ceil(+postsCount / +pageSize)
@@ -93,8 +95,42 @@ export class PostsQueryRepo {
                 post.myStatus = userPostStatus.status
             }
         }
-        const postClassInstance = new PostDBType(post._id, post.title, post.shortDescription, post.content, post.blogId, post.blogName, post.createdAt, post.likesCount, post.dislikesCount, post.myStatus, post.likesCollection)
-        return postClassInstance.getOutputType()
+        // const postClassInstance = new PostDBType(post._id, post.title, post.shortDescription, post.content, post.blogId, post.blogName, post.createdAt, post.likesCount, post.dislikesCount, post.myStatus, post.likesCollection)
+        // return postClassInstance.getOutputType()
+        return this.preparePostForOutput(post)
+    }
+
+    preparePostForOutput(post: PostDBType) {
+
+        const likesAndDislikes = post.likesCollection.reduce((acc, post) => {
+            if (post.status === "Like") {
+                acc.likesCount++;
+            } else if (post.status === "Dislike") {
+                acc.dislikesCount++;
+            }
+            return acc;
+        }, {likesCount: 0, dislikesCount: 0});
+
+        const newestLikes = post.likesCollection
+            .filter(n => n.status === 'Like')
+            .sort((a, b) => b.addedAt.localeCompare(a.addedAt))
+            .slice(0, 3)
+
+        return {
+            id: post._id.toString(),
+            title: post.title,
+            shortDescription: post.shortDescription,
+            content: post.content,
+            blogId: post.blogId,
+            blogName: post.blogName,
+            createdAt: post.createdAt,
+            extendedLikesInfo: {
+                likesCount: likesAndDislikes.likesCount,
+                dislikesCount: likesAndDislikes.dislikesCount,
+                myStatus: post.myStatus,
+                newestLikes: newestLikes
+            }
+        }
     }
 
     // async getAllPostsByBlogsID(
