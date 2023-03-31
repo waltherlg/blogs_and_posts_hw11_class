@@ -29,7 +29,8 @@ export class PostsQueryRepo {
             if(userPostStatus){
                 post.myStatus = userPostStatus.status
             }
-            return post.getOutputType()
+            const postClassInstance = new PostDBType(post._id, post.title, post.shortDescription, post.content, post.blogId, post.blogName, post.createdAt, post.likesCount, post.dislikesCount, post.myStatus, post.likesCollection)
+            return postClassInstance.getOutputType()
         })
 
         let pageCount = Math.ceil(+postsCount / +pageSize)
@@ -62,7 +63,8 @@ export class PostsQueryRepo {
             if(userPostStatus){
                 post.myStatus = userPostStatus.status
             }
-            return post.getOutputType()
+            const postClassInstance = new PostDBType(post._id, post.title, post.shortDescription, post.content, post.blogId, post.blogName, post.createdAt, post.likesCount, post.dislikesCount, post.myStatus, post.likesCollection)
+            return postClassInstance.getOutputType()
         })
         let postsCount = await PostModel.countDocuments({"blogId": blogId})
         let pageCount = Math.ceil(+postsCount / +pageSize)
@@ -85,11 +87,14 @@ export class PostsQueryRepo {
         if (!post) {
             return null
         }
-        const userPostStatus = post.likesCollection.find(p => p.userId === userId)
-        if(userPostStatus){
-            post.myStatus = userPostStatus.status
+        if(userId){
+            const userPostStatus = post.likesCollection.find(p => p.userId === userId)
+            if(userPostStatus){
+                post.myStatus = userPostStatus.status
+            }
         }
-        return post.getOutputType()
+        const postClassInstance = new PostDBType(post._id, post.title, post.shortDescription, post.content, post.blogId, post.blogName, post.createdAt, post.likesCount, post.dislikesCount, post.myStatus, post.likesCollection)
+        return postClassInstance.getOutputType()
     }
 
     // async getAllPostsByBlogsID(

@@ -22,8 +22,8 @@ import {PostsQueryRepo} from "../repositories/post-query-repository";
 import {PostTypeOutput} from "../models/posts-types";
 import {CommentsQueryRepo} from "../repositories/comments-query-repository";
 import {injectable} from "inversify";
-import {jwtService} from "../application/jwt-service";
 import {LikeService} from "../domain/like-service";
+
 @injectable()
 export class PostsController {
     constructor(protected postsService: PostsService,

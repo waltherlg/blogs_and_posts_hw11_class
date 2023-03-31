@@ -68,11 +68,12 @@ export class BlogsController {
             if (!foundBlog) {
                 res.sendStatus(404)
             } else {
-                const newPost = await this.postsService.createPost(
+                const newPostId = await this.postsService.createPost(
                     req.body.title,
                     req.body.shortDescription,
                     req.body.content,
                     req.params.blogId.toString())
+                const newPost = await this.postsQueryRepo.getPostByID(newPostId)
                 res.status(201).send(newPost)
             }
         } catch (error) {
