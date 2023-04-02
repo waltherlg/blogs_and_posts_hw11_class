@@ -100,7 +100,7 @@ export class PostsQueryRepo {
         return this.preparePostForOutput(post)
     }
 
-    preparePostForOutput(post: PostDBType) {
+    preparePostForOutput(post: PostDBType, userId?: string) {
 
         const likesAndDislikes = post.likesCollection.reduce((acc, post) => {
             if (post.status === "Like") {
@@ -116,6 +116,14 @@ export class PostsQueryRepo {
             .sort((a, b) => b.addedAt.localeCompare(a.addedAt))
             .slice(0, 3)
 
+        const newestLikesForOutput = newestLikes.map((newestLikes) => {
+            return {
+                addedAt: newestLikes.addedAt,
+                login: newestLikes.login,
+                userId: newestLikes.userId
+            }
+        })
+
         return {
             id: post._id.toString(),
             title: post.title,
@@ -128,7 +136,7 @@ export class PostsQueryRepo {
                 likesCount: likesAndDislikes.likesCount,
                 dislikesCount: likesAndDislikes.dislikesCount,
                 myStatus: post.myStatus,
-                newestLikes: newestLikes
+                newestLikes: newestLikesForOutput
             }
         }
     }

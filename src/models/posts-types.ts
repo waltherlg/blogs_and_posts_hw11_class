@@ -64,7 +64,7 @@ type extendedLikesInfoType = {
     likesCount: number,
     dislikesCount: number,
     myStatus: string,
-    newestLikes: Array<likesCollectionType>
+    newestLikes: Array<newestlikesOutputType>
 }
 
 type likesCollectionType = {
@@ -72,4 +72,10 @@ type likesCollectionType = {
     userId: string,
     login: string,
     status: string
+}
+
+type newestlikesOutputType = {
+    addedAt: string,
+    login: string,
+    userId: string,
 }
