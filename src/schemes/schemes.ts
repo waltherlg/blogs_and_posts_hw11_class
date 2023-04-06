@@ -73,6 +73,11 @@ export const postSchema = new mongoose.Schema<PostDBType>({
     myStatus: String,
     likesCollection: [likesCollectionSchema]
 })
+postSchema.methods = {
+    countLikesAndDislikes: PostDBType.prototype.countLikesAndDislikes,
+    getNewestLikes: PostDBType.prototype.getNewestLikes,
+    preparePostForOutput: PostDBType.prototype.preparePostForOutput
+}
 export const PostModel = mongoose.model('posts', postSchema)
 
 export const commentSchema = new mongoose.Schema<CommentDBType>({

@@ -13,7 +13,7 @@ export class PostDBType {
                 public myStatus: string,
                 public  likesCollection: Array<likesCollectionType>) {}
     countLikesAndDislikes() {
-        return this.likesCollection.reduce((acc, post) => {
+        return this.likesCollection!.reduce((acc, post) => {
             if (post.status === "Like") {
                 acc.likesCount++;
             } else if (post.status === "Dislike") {
@@ -23,13 +23,24 @@ export class PostDBType {
         }, { likesCount: 0, dislikesCount: 0 });
     }
     getNewestLikes(){
-        return this.likesCollection
+        return (this.likesCollection
             .filter(n => n.status === 'Like')
             .sort((a, b) => b.addedAt.localeCompare(a.addedAt))
-            .slice(0, 3)
+            .slice(0, 3))
     }
 
-    getOutputType() {
+
+    preparePostForOutput() {
+        const LikesAndDislikes = this.countLikesAndDislikes()
+        const newestLikes = this.getNewestLikes()
+        const newestLikesForOutput = newestLikes.map((like) => {
+            return {
+                addedAt: like.addedAt,
+                login: like.login,
+                userId: like.userId
+            }
+        })
+
         return {
             id: this._id.toString(),
             title: this.title,
@@ -39,14 +50,13 @@ export class PostDBType {
             blogName: this.blogName,
             createdAt: this.createdAt,
             extendedLikesInfo: {
-                likesCount: this.countLikesAndDislikes().likesCount,
-                dislikesCount: this.countLikesAndDislikes().dislikesCount,
+                likesCount: LikesAndDislikes.likesCount,
+                dislikesCount: LikesAndDislikes.dislikesCount,
                 myStatus: this.myStatus,
-                newestLikes: this.getNewestLikes()
+                newestLikes: newestLikesForOutput
             }
         }
     }
-
 }
 
 export type PostTypeOutput = {
@@ -64,7 +74,7 @@ type extendedLikesInfoType = {
     likesCount: number,
     dislikesCount: number,
     myStatus: string,
-    newestLikes: Array<newestlikesOutputType>
+    newestLikes: Array<newestLikesOutputType>
 }
 
 type likesCollectionType = {
@@ -74,7 +84,7 @@ type likesCollectionType = {
     status: string
 }
 
-type newestlikesOutputType = {
+type newestLikesOutputType = {
     addedAt: string,
     login: string,
     userId: string,
